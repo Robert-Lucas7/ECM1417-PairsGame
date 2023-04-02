@@ -1,0 +1,16 @@
+{
+  "name": "web_dev_coursework_actual",
+  "version": "1.0.0",
+  "description": "web dev coursework",
+  "main": "index.js",
+  "scripts": {
+    "gulp": "gulp"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.29.1",
+    "gulp": "^4.0.2",
+    "gulp-connect-php": "^1.0.3"
+  }
+}

@@ -1,0 +1,10 @@
+p{
+    color: white;
+}
+p a {
+    text-decoration: none;
+    color: green;
+}
+#main{
+    height: 75vh;
+}

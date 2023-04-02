@@ -1,0 +1,24 @@
+#avatarColourImg{
+    z-index: -1;
+}
+.avatarImages{
+    position:absolute;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+}
+#headingAndForm {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width:50%;
+    text-align: center;
+}
+.usernameValidation li{
+    color: red;
+    display: none;
+}
+label{
+    color: white;
+}

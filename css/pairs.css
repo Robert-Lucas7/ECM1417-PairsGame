@@ -1,0 +1,49 @@
+#gameAreaDiv {
+    box-shadow: 5px 5px #000000;
+    background-color: #808080;
+    height: 75%;
+    width: 75%;
+    margin: auto;
+
+}
+
+#playPairsBtn {
+    padding: 10px;
+}
+html{
+    height:100%;    
+}
+#cardTable{
+    width: 100%;
+    height: 100%;
+    border-spacing: 20px;
+}
+#cardTable td{
+    margin: 20px;
+    
+}
+#cardTable td{
+    border:5px solid black;
+    border-collapse: collapse;
+}
+
+.colourCard{
+    width: 100%;
+}
+.eyesOrMouthCard{
+   position: absolute;
+   top: 0;
+   left: 0;
+   width:100%;
+   height:100%;
+}
+.cardInGame{
+    display: none;
+}
+.showCard{
+    display: block;
+}
+.center-btn{
+    display: flex;
+    justify-content: center;
+}
