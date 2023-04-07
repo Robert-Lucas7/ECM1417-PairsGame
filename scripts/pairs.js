@@ -73,10 +73,11 @@ const Game = {//Variables needed for the pairs game. They are declared in an obj
     wasMatch:false,
     points:0,
     startTime:Date.now(),
-    gameFinished : false
+    gameFinished : false 
+
 }
 
-function cardClicked(event){
+function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pushed) to the Game.cardsClicked array properly and that the display properties are the correct value.
     clickedCard = event.currentTarget;
     console.log(Game.clickedCells);
     //Check if the card clicked is one of the last two cards clicked - nothing should happen if the "current card" has been clicked in the past 2 clicks.
@@ -139,7 +140,20 @@ function cardClicked(event){
             }
         }
         if(Game.gameFinished === true){//When the game is finished there should be a message displayed, the play button should reappear but with 'Play again' text on it.
-            alert(`You have completed the game with ${Game.points} points`);
+            //alert(`You have completed the game with ${Game.points} points`);
+            //Create a "You Won!" banner which displays the points won and time taken.
+            let banner = document.createElement('div');
+            banner.id = "winBanner";
+            let bannerHeading = document.createElement('h1');
+            bannerHeading.innerHTML = `You won with ${Game.points} points!`;
+
+            let bannerTiming = document.createElement('h1');
+            bannerTiming.innerHTML = `Completed in: ${((Date.now() - Game.startTime)/1000).toFixed(2)} seconds`
+            banner.append(bannerHeading);
+            banner.append(bannerTiming);
+
+            document.getElementById('gameAreaDiv').appendChild(banner);
+            document.getElementById("cardTable").classList.add("hide");
             let playPairsBtn = document.getElementById("playPairsbtn");
             playPairsBtn.innerHTML = "Play again";
             playPairsBtn.removeEventListener('click', PlayGame);
@@ -174,8 +188,22 @@ function checkForMatch(currentClicked, currentImgs){
 }
 function resetGame(event){
     //Remove the previous cells of the table (empty the table), then call PlayGame() to setup the board again.
+    let banner = document.getElementById('winBanner');
+    banner.remove();
     let table = document.getElementById('cardTable');
+    table.classList.remove('hide');
+    table.classList.add('showTable');
+
     table.replaceChildren(); //removes all children from the table element.
+    //Reset all of the Game object properties here:
+    
+    Game.clicks = 0;
+    Game.clickedCells = [];
+    Game.matchedCells = [];
+    Game.points = 0;
+    Game.wasMatch = false;
+    Game.startTime = Date.now();
+    Game.gameFinished = false;
     
     PlayGame(event);
 }

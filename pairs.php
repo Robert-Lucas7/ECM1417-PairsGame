@@ -27,7 +27,7 @@
             <table id="cardTable">
 
             </table>
-            <div class="center-btn">
+            <div class="">
                 <button id="playPairsbtn" class="btn btn-primary">Play Pairs</button>
             </div>
             

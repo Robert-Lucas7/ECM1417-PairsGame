@@ -4,11 +4,16 @@
     height: 75%;
     width: 75%;
     margin: auto;
-
+    position: relative;
 }
 
 #playPairsBtn {
+    height: 10%;
     padding: 10px;
+    position: absolute;
+    margin: auto;
+    inset: 0;
+    z-index: 1;
 }
 html{
     height:100%;    
@@ -43,7 +48,18 @@ html{
 .showCard{
     display: block;
 }
-.center-btn{
-    display: flex;
-    justify-content: center;
+.hide{
+    display: none;
+}
+.showTable{
+    display: table;
+}
+#winBanner{
+    height: 100%;
+    width: 100%;
+    background-color: greenyellow;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
 }
