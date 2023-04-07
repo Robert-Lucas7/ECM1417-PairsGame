@@ -42,22 +42,15 @@
     </script>
 </head>
 <!--Instead of two lists use a flexbox with 2 columns-->
-<div role="navigation" class="navbar navbar-expand navbar-dark">
+<div role="navigation" class="navbar navbar-expand navbar-dark" id="navbarDiv">
     <ul class="navbar-nav me-auto">
         <li name="home" class="nav-item">
             <a href="index.php" class="nav-link active">Home</a>
         </li>
-        <?php
-            if($_SESSION['loggedIn'] === true){
-                echo    "<li name='memory' class='nav-item'>
-                            <a href='pairs.php' class='nav-link'>Play Pairs</a>
-                        </li>";
-            } else{
-                "<li name='memory' class='nav-item'>
-                            <a href='pairs.php' class='nav-link disabled'>Play Pairs</a>
-                        </li>";
-            }
-        ?>
+        <li name='memory' class='nav-item'>
+            <a href='pairs.php' class='nav-link'>Play Pairs</a>
+        </li>
+            
 
         <!-- Only one of these options should show depending on if the user is already registered. Check here using php (server-side) to see if user is logged in-->
         <!-- For now v-->

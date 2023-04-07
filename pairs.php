@@ -1,5 +1,9 @@
 <?php
     session_start();
+    
+    if(empty($_SESSION['loggedIn']) || $_SESSION['loggedIn'] === false){//if the user is not logged in, redirect to 'index.php'. Unsure if the second condition is relevant as the user shouldn't have access to the session as it is stored server-side. Better option would be to disable the button not the link.
+        header('Location: index.php');
+    }
 ?>
 <html>
 

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function(){
-    setupGameArea();
     document.getElementById("playPairsbtn").addEventListener("click", PlayGame);
 });
+
 
 function setupGameArea(){
     //Using a few arrays of potential attributes for the colour, eyes, and mouth
@@ -29,7 +29,15 @@ function setupGameArea(){
             eyesImg.src = `./images/emoji assets/eyes/${eyes[rndEyeIndex]}.png`;
             mouthImg.src = `./images/emoji assets/mouth/${mouths[rndMouthIndex]}.png`;
             let card = {colour:colourImg, eyes:eyesImg, mouth:mouthImg};
-            if(!cards.includes(card)){//Makes sure there aren't already the same pair of cards in the cards array.
+            //======================== DUPLICATES CAN BE ADDED FOR SOME REASON, HAVE A LOOK AT THIS =======================================
+            /*
+            LOOK AT:*/
+            var contains = cards.some(elem => {
+                return card.colour === elem.colour && card.eyes === elem.eyes && card.mouth === elem.mouth;
+            });
+            //console.log(contains);
+            
+            if(!contains){//Makes sure there aren't already the same pair of cards in the cards array.
                 cards.push(card);
             } else{
                 j--;
@@ -58,87 +66,123 @@ function setupGameArea(){
         table.append(row);
     }
 }
-const Game = {
-    prevClicked : null, //Table cell that is clicked, each image has a class of the table cell's id.
+const Game = {//Variables needed for the pairs game. They are declared in an object so they are not global variables.
     clicks:0,
-    matchedCells:[]
+    matchedCells:[],
+    clickedCells : [], //This will have a maximum of 3 cells in it at a time (for matching pairs - clickedCells.length == number of cards to match + 1).
+    wasMatch:false,
+    points:0,
+    startTime:Date.now(),
+    gameFinished : false
 }
+
 function cardClicked(event){
     clickedCard = event.currentTarget;
-    console.log(Game.clicks);
-    console.log(Game.prevClicked);
-    console.log(Game.matchedCells);
-    Game.clicks++;
-    //Showing the Card
-    let imgs = document.getElementsByClassName(clickedCard.id);
-    for(let i=0;i<3;i++){
-        imgs[i].classList.add('showCard');
-        imgs[i].classList.remove('cardInGame');
+    console.log(Game.clickedCells);
+    //Check if the card clicked is one of the last two cards clicked - nothing should happen if the "current card" has been clicked in the past 2 clicks.
+    let cardNotClickedRecently = true;
+    switch(Game.clickedCells.length){
+        
+        case 0:
+            break;
+        case 1:
+        case 2:
+            if(Game.clickedCells.includes(clickedCard)){
+                cardNotClickedRecently = false;
+            }
+            break;
+        case 3://Check the last 2 cards that were clicked.
+            if(Game.clickedCells[1] === clickedCard || Game.clickedCells[2] === clickedCard){
+                cardNotClickedRecently = false;
+            }
+            break;
+        default:
+            break;
     }
-    if(Game.clicks % 2 === 0 && Game.prevClicked !== null){
-        checkForMatch(clickedCard, imgs);
+    //console.log(Game.clickedCells);
+    if(cardNotClickedRecently){
+        //Check the length of the Game.clickedCells array. If it is less than 3, just add the card. Else, use pop() and then add the card.
+        if(Game.clickedCells.length >= 3){
+            Game.clickedCells.shift();//Removes the first element from an array
+        }
+        Game.clickedCells.push(clickedCard);
+        
+        Game.clicks++;
+        //Showing the Card
+        let imgs = document.getElementsByClassName(clickedCard.id);
+        for(let i=0;i<3;i++){
+            imgs[i].classList.add('showCard');
+            imgs[i].classList.remove('cardInGame');
+        }
+        
+        console.log(Date.now() - Game.startTime);
+
+        if(Game.clicks % 2 === 0 && Game.clickedCells.length > 1){
+            Game.wasMatch = checkForMatch(clickedCard, imgs);//Game.matchedCells.every(elem => Game.clickedCells.includes(elem)) (for below - LOGIC DOESNT WORK FOR SOME REASON)
+            if(Game.wasMatch === true && Game.matchedCells.length === 10){
+                Game.gameFinished = true;//alert(`You have completed the game with ${Game.points} points`);
+            }
+        } 
+        else if(Game.clickedCells.length === 3 && Game.clicks % 2 === 1 && !Game.wasMatch){// If the number of clicks is odd and it isn't the first click, then remove the previous two cards from displaying.
+            //set the last 2 sets of card imgs to cardInGame class (will be 'hideCard').
+            let previousCardImgs = document.getElementsByClassName(Game.clickedCells[Game.clickedCells.length - 2].id);
+            let lastCardImgs = document.getElementsByClassName(Game.clickedCells[0].id);
+            for(let i=0;i<3;i++){
+                //Check if either are in this.matchedCells
+                
+                previousCardImgs[i].classList.add('cardInGame');//CardInGame should be called 'hideCard' this will be changed soon!
+                previousCardImgs[i].classList.remove('showCard');
+                
+                lastCardImgs[i].classList.add('cardInGame');
+                lastCardImgs[i].classList.remove('showCard');
+                
+            }
+        }
+        if(Game.gameFinished === true){//When the game is finished there should be a message displayed, the play button should reappear but with 'Play again' text on it.
+            alert(`You have completed the game with ${Game.points} points`);
+            let playPairsBtn = document.getElementById("playPairsbtn");
+            playPairsBtn.innerHTML = "Play again";
+            playPairsBtn.removeEventListener('click', PlayGame);
+            playPairsBtn.addEventListener('click', resetGame);
+            playPairsBtn.style.display = 'block';
+        }
     }
-    Game.prevClicked = clickedCard;
+    
 }
 function checkForMatch(currentClicked, currentImgs){
     let isMatch = true;
     for(let i=0;i<3;i++){ //If the images on both of the cards are the same, then there is a match.
-        if(isMatch && currentImgs[i].src !== Game.prevClicked.children[i].src){
+        if(isMatch && currentImgs[i].src !== Game.clickedCells[Game.clickedCells.length - 2].children[i].src){
             isMatch = false;
+            break;
         }
     }
     if(isMatch){//There is a match
-        Game.matchedCells.push(Game.prevClicked);
+        Game.matchedCells.push(Game.clickedCells[Game.clickedCells.length - 2]);
         Game.matchedCells.push(currentClicked);
         //Removing the event listener for clicking a table cell.
-        document.getElementById(currentClicked.id).removeEventListener('click', cardClicked);
-        document.getElementById(Game.prevClicked.id).removeEventListener('click', cardClicked);
+        currentClicked.removeEventListener('click', cardClicked);
+        Game.clickedCells[Game.clickedCells.length - 2].removeEventListener('click', cardClicked);
+
+        Game.points += 20; //20 points for a match, -1 for each second taken, 
+
+        return true;
     }else{
-        let prevImgs = document.getElementsByClassName(Game.prevClicked.id);
-        setTimeout(function(){ // This is a cheap way to cheap the card to be displayed for a bit if there isn't a match. The previous 2 cards should be displayed until the next card is clicked.
-            for(let i=0;i<3;i++){
-                //Check if either are in this.matchedCells
-                
-                    currentImgs[i].classList.add('cardInGame');//CardInGame should be called 'hideCard' this will be changed soon!
-                    currentImgs[i].classList.remove('showCard');
-                
-                    prevImgs[i].classList.add('cardInGame');
-                    prevImgs[i].classList.remove('showCard');
-                
-            }
-        }, 1000);
         
+        return false;
     }
 }
-/*, //cells that have already been matched
-    getLastCellClicked(){
-        return this.prevClicked;
-    },
-    click(event){
-        clickedCell = event.currentTarget;
-        //this.clicks+=1;
-        console.log(clicks);
-        console.log(this.clicks %2===0);
-        console.log(this.prevClicked);
-        //Show image in table cell that was clicked.
-        let imgs = document.getElementsByClassName(clickedCell.id);
-        for(let i=0;i<3;i++){
-            imgs[i].classList.add('showCard');
-            imgs[i].classList.remove('cardInGame');
-                
-        }
-        if(this.clicks % 2 === 0 && this.prevClicked !== null){
-            this.checkForMatch(clickedCell, imgs);
-        }
-        this.prevClicked = clickedCell;
-        
-    },
-    checkForMatch(currentClicked, currentImgs){
-        
-    }
-}*/
-function PlayGame(e){
-    e.currentTarget.style.display = "none";
+function resetGame(event){
+    //Remove the previous cells of the table (empty the table), then call PlayGame() to setup the board again.
+    let table = document.getElementById('cardTable');
+    table.replaceChildren(); //removes all children from the table element.
+    
+    PlayGame(event);
+}
+function PlayGame(event){
+    event.currentTarget.style.display = "none";
+    setupGameArea();
+    console.log(document.getElementById('cardTable'));
     for(let i=0;i<2;i++){
         for(let j=0;j<5;j++){
             document.getElementById(`td${i}${j}`).addEventListener("click",cardClicked);
