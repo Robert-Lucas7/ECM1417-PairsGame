@@ -47,15 +47,16 @@
         <li name="home" class="nav-item">
             <a href="index.php" class="nav-link active">Home</a>
         </li>
-        <li name='memory' class='nav-item'>
-            <a href='pairs.php' class='nav-link'>Play Pairs</a>
-        </li>
+        
             
 
         <!-- Only one of these options should show depending on if the user is already registered. Check here using php (server-side) to see if user is logged in-->
         <!-- For now v-->
     </ul>
     <ul class="navbar-nav ms-auto">
+        <li name='memory' class='nav-item'>
+            <a href='pairs.php' class='nav-link'>Play Pairs</a>
+        </li>
         <?php
             if($_SESSION['loggedIn'] === true){
                 echo   "<li name='leaderboard' class='nav-item'>

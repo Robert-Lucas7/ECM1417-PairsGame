@@ -22,7 +22,7 @@
     <div id="main">
         
         <img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">
-        <div id="gameAreaDiv">
+        <div id="gameAreaDiv" class="center">
             
             <table id="cardTable">
 

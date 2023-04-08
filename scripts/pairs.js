@@ -72,8 +72,10 @@ const Game = {//Variables needed for the pairs game. They are declared in an obj
     clickedCells : [], //This will have a maximum of 3 cells in it at a time (for matching pairs - clickedCells.length == number of cards to match + 1).
     wasMatch:false,
     points:0,
-    startTime:Date.now(),
-    gameFinished : false 
+    startTime:0,
+    gameFinished : false,
+    timerInterval : null,
+    currentSecond : 0
 
 }
 
@@ -93,7 +95,7 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
             }
             break;
         case 3://Check the last 2 cards that were clicked.
-            if(Game.clickedCells[1] === clickedCard || Game.clickedCells[2] === clickedCard){
+            if(Game.clickedCells[2] === clickedCard){ 
                 cardNotClickedRecently = false;
             }
             break;
@@ -138,6 +140,10 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
                 lastCardImgs[i].classList.remove('showCard');
                 
             }
+            if(Game.points - 5 >=0){
+                Game.points -= 5;
+                updatePoints();
+            }
         }
         if(Game.gameFinished === true){//When the game is finished there should be a message displayed, the play button should reappear but with 'Play again' text on it.
             //alert(`You have completed the game with ${Game.points} points`);
@@ -159,6 +165,8 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
             playPairsBtn.removeEventListener('click', PlayGame);
             playPairsBtn.addEventListener('click', resetGame);
             playPairsBtn.style.display = 'block';
+
+            clearInterval(Game.timerInterval);
         }
     }
     
@@ -179,7 +187,7 @@ function checkForMatch(currentClicked, currentImgs){
         Game.clickedCells[Game.clickedCells.length - 2].removeEventListener('click', cardClicked);
 
         Game.points += 20; //20 points for a match, -1 for each second taken, 
-
+        updatePoints();
         return true;
     }else{
         
@@ -208,7 +216,24 @@ function resetGame(event){
     PlayGame(event);
 }
 function PlayGame(event){
-    event.currentTarget.style.display = "none";
+    //Add the points and timer heading.
+    
+    if(document.getElementById('pointsHeading') === null && document.getElementById('timerHeading') === null){
+        let pointsHeading = document.createElement('h1');
+        let timerHeading = document.createElement('h1');
+        pointsHeading.id = "pointsHeading";
+
+        
+        timerHeading.id = "timerHeading";
+        
+        let mainDiv = document.getElementById('main');
+        mainDiv.append(pointsHeading);
+        mainDiv.append(timerHeading);
+    }
+    timerHeading.innerHTML = "Timer: 0";
+    pointsHeading.innerHTML = "Points: 0";
+
+    event.currentTarget.style.display = "none"; //hiding the 'play pairs' button.
     setupGameArea();
     console.log(document.getElementById('cardTable'));
     for(let i=0;i<2;i++){
@@ -216,4 +241,28 @@ function PlayGame(event){
             document.getElementById(`td${i}${j}`).addEventListener("click",cardClicked);
         }
     }
+
+    Game.startTime = Date.now();
+    Game.timerInterval = setInterval(updateTimer,10);
+}
+function updateTimer(){
+    let timer = document.getElementById("timerHeading");
+    let timeDiffMs = Date.now() - Game.startTime;
+    let ms = timeDiffMs % 1000;
+    let s = Math.floor(timeDiffMs/1000) % 60;
+    if(s != Game.currentSecond){
+        Game.currentSecond = s;
+        if(Game.points - 1 >= 0 && s % 2 === 0){
+            Game.points -= 1;
+            updatePoints();
+        }
+        
+    }
+
+    let m = Math.floor(timeDiffMs/60000) % 60;
+    timer.innerHTML = `Time: ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}:${ms}`;
+}
+function updatePoints(){
+    let pointsHeading = document.getElementById('pointsHeading');
+    pointsHeading.innerHTML = `Points: ${Game.points}`;
 }
