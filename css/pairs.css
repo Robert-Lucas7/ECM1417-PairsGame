@@ -10,15 +10,16 @@
     left:0;
     right:0;
 }
-
-#playPairsBtn {
+.buttons{
     width: fit-content;
     height: fit-content;
     padding: 10px;
-    position: absolute;
-    margin: auto;
-    inset: 0;
+    position:relative;
     z-index: 1;
+}
+#playPairsBtn {
+    
+    
 }
 html{
     height:100%;    

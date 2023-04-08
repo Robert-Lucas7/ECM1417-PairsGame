@@ -73,9 +73,10 @@ const Game = {//Variables needed for the pairs game. They are declared in an obj
     wasMatch:false,
     points:0,
     startTime:0,
-    gameFinished : false,
+    gameFinished : true,
     timerInterval : null,
-    currentSecond : 0
+    currentSecond : 0,
+    totalTime:null
 
 }
 
@@ -95,7 +96,7 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
             }
             break;
         case 3://Check the last 2 cards that were clicked.
-            if(Game.clickedCells[2] === clickedCard){ 
+            if(Game.clickedCells[2] === clickedCard || (Game.clickedCells[1] === clickedCard && Game.clicks % 2 === 0)){ 
                 cardNotClickedRecently = false;
             }
             break;
@@ -154,7 +155,9 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
             bannerHeading.innerHTML = `You won with ${Game.points} points!`;
 
             let bannerTiming = document.createElement('h1');
-            bannerTiming.innerHTML = `Completed in: ${((Date.now() - Game.startTime)/1000).toFixed(2)} seconds`
+            let totalTime = ((Date.now() - Game.startTime)/1000).toFixed(2);
+            Game.totalTime = totalTime;
+            bannerTiming.innerHTML = `Completed in: ${totalTime} seconds`
             banner.append(bannerHeading);
             banner.append(bannerTiming);
 
@@ -167,10 +170,37 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
             playPairsBtn.style.display = 'block';
 
             clearInterval(Game.timerInterval);
+
+            //Create a submit score button here
+            let submitScoreBtn = document.createElement('button');
+            submitScoreBtn.innerHTML = 'Submit Score';
+            submitScoreBtn.id = 'submitScoreButton';
+            submitScoreBtn.classList = 'buttons btn btn-success';
+            submitScoreBtn.addEventListener("click", postScoreToLeaderboard);
+            document.getElementById('buttonDiv').append(submitScoreBtn);
+
         }
     }
     
 }
+function postScoreToLeaderboard(){
+    console.log("HELLO");
+    //Make a post request here with the relevant details.
+    fetch('/leaderboard.php', {
+        method:'POST',
+        headers:{
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json'
+        },
+        body:JSON.stringify({
+            'points': 50,
+            'time' : Game.totalTime
+        })
+    })
+    .then(response => response.json())
+    .then(response => console.log(JSON.stringify(response)));
+}
+
 function checkForMatch(currentClicked, currentImgs){
     let isMatch = true;
     for(let i=0;i<3;i++){ //If the images on both of the cards are the same, then there is a match.
