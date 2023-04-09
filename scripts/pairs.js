@@ -186,17 +186,17 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
 function postScoreToLeaderboard(){
     console.log("HELLO");
     //Make a post request here with the relevant details.
-    fetch('./testPost.php', {
+    fetch('./leaderboard.php', {
         method:'POST',
         headers:{
             'Accept' : 'application/json',
             'Content-Type' : 'application/json'
         },
         body: JSON.stringify({
-            'points':50,
+            'points':Game.points,
             'time':Game.totalTime
         })
-    });
+    }).then(response => console.log(response.json()));
     
 }
 

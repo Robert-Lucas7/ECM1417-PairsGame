@@ -1,0 +1,26 @@
+.leaderboardHeadings{
+    font: bold 1em Arial;
+}
+#leaderboardTable{
+    width:100%;
+    text-align: center;
+}
+#main{
+    background-color: grey;
+    width: 75%;
+    height:75%;
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    box-shadow: 5px 5px #000000;
+}
+#main h1{
+    text-align: center;
+}
+#leaderboardTable th{
+    background-color: blue;
+}
+#leaderboardTable, #leaderboardTable th,#leaderboardTable td{
+    border:2px solid black;
+    border-collapse: separate;
+}
