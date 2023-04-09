@@ -1,5 +1,6 @@
 <?php
     session_start();
+    
     if(!empty($_POST['username']) && !empty($_POST['avatarColour']) && !empty($_POST['avatarMouth']) && !empty($_POST['avatarEyes'])){
         //Validate here (server-side) - if valid redirect to 'play pairs' page
         //Username validation
@@ -36,6 +37,7 @@
             $_SESSION['username'] = $username;
             $_SESSION['avatar'] = json_encode(array("colour"=>$_POST["avatarColour"], "eyes"=>$_POST["avatarEyes"], "mouth"=>$_POST["avatarMouth"]));
             //setcookie("avatar", sprintf('{"colour":"%s","eyes":"%s","mouth":"%s"}',$_POST["avatarColour"],$_POST["avatarEyes"],$_POST["avatarMouth"] ));//$_POST["avatarColour"], $_POST["avatarEyes"], $_POST["avatarMouth"])));
+            //echo print_r($_SESSION);
             header('Location: index.php');
         }
     }
@@ -95,7 +97,7 @@
         
         <?php include("navbar.php")?>
         <div id="main">
-            <img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">
+            <!--<img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">-->
             <div id="headingAndForm">
                 <h1>Register here</h1>
                 <form id="registrationForm" onsubmit="return ValidateUsername()" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"><!--the action submits the form data to the same page, htmlspecialchars() prevents XSS attacks, $_SERVER["PHP_SELF"] gets the name of the currently executing script.-->

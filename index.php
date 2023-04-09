@@ -13,9 +13,11 @@
         <script>
             document.addEventListener("DOMContentLoaded", function(){
                 let playBtn = document.getElementById("playBtn");
-                playBtn.addEventListener("click", function(){
-                    location.href = "pairs.php";
-                });
+                if(playBtn !== null){
+                    playBtn.addEventListener("click", function(){
+                        location.href = "pairs.php";
+                    });
+                }
             });
         </script>
     </head>
@@ -23,10 +25,10 @@
         <?php include("./navbar.php")?>
         <!--<div id="navbarDiv"></div>-->
         <div id="main">
-            <img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">    
+            <!--<img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">    -->
             <div class="center"> <!-- Find out how to make this div to be the size of the viewport - the height of the navbar-->
             <?php
-                if($_SESSION['loggedIn'] === true){
+                if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true){
                     echo    "<h1 id='heading'>Welcome to pairs!</h1> 
                                 <button id='playBtn' class='btn btn-primary'>Click here to play</button>
                             </div>";
@@ -37,11 +39,6 @@
                 }
             ?>    
             
-        <!--
-            
-            
-            
-            -->
         </div>
     </body>
 </html>

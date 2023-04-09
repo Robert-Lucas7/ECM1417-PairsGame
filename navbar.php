@@ -1,6 +1,4 @@
-<html>
 
-<head>
     <script>
 
         //Get the children of each li element in ul.
@@ -40,7 +38,6 @@
         //==================== GETTING DETAILS ABOUT THE EMOJI HERE (type of skin, eyes, mouth) ============================
         
     </script>
-</head>
 <!--Instead of two lists use a flexbox with 2 columns-->
 <div role="navigation" class="navbar navbar-expand navbar-dark" id="navbarDiv">
     <ul class="navbar-nav me-auto">
@@ -91,4 +88,3 @@
     
 </div>
 
-</html>
