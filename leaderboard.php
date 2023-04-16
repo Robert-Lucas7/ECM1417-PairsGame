@@ -1,44 +1,58 @@
 <?php
     session_start();
-
     //Update the session variables for the leaderboard on the post request here.
     //SHOULD PROBABLY CHECK THE ORIGIN OF THE REQUEST
    
     if($_SERVER['REQUEST_METHOD'] === "POST" && basename($_SERVER['HTTP_REFERER']) === "pairs.php"){
         $post =json_decode(file_get_contents('php://input'), true);//true flag is to indicate if an associative array is returned or straight json.
         if(!empty($post)){
-            //Arrays are always ordered - as they are an 'ordered map'
-            /*Leaderboard structure is: - STRUCTURE IS CHANGING TO SEQUENTIAL INTEGER INDEXES as associative arrays cannot have duplicate keys (and points may be the same)
-            [1stPoint] => array(
-                "username" => "username1",
-                "time" => "time1"
-            ),
-            [2ndPoint] => etc.
+            
+            // ==================================================================  JSON FILE IMPLEMENTATION  ==============================================================================
+            //Get contents of the file
+            /*
+            Should be structured like:
+            {
+                position1 : {
+                    points: numPoints,
+                    username : username1,
+                    time: timeToComplete
+                },
+                position2 :{
+                    ...
+                }
+            }
             */
-            //If there isn't currently any leaderboard entries then create a structure for it...
-            if(!isset($_SESSION['leaderboard'])){ //LOOK INTO isset() vs empty()
-                $_SESSION['leaderboard'] = array(array(
-                    "points" => $post["points"],
-                    "username" => $_SESSION['username'],
-                    "time" => $post["time"]
-                ));
-            } else{// If the leaderboard already exists, then find the new scores position in the array and insert it there.
-                $newEntry = array(array(
-                    "points" => $post["points"],
-                    "username" => $_SESSION['username'],
-                    "time" => $post["time"]
-                ));
-                $indexToInsert = 0;
-                foreach($_SESSION['leaderboard'] as $entry){
-                    if($entry["points"] >= $newEntry[0]["points"]){
-                        $indexToInsert++;
+            $newEntry = array(array(
+                "points" => $post["points"],
+                "username" => $_SESSION['username'],
+                "time" => $post["time"]
+            ));
+            
+            $leaderboardData = json_decode(file_get_contents('./data/leaderboard.json'), true);
+            //Insert the new entry into the correct position (so it remains ordered)
+            $positionToInsert = 0;
+            if(!empty($leaderboardData)){
+                foreach($leaderboardData as $entry){
+                    if($entry['points'] >= $newEntry[0]['points']){
+                        $positionToInsert++;
                     }
                     else{
                         break;
                     }
                 }
-                array_splice($_SESSION['leaderboard'], $indexToInsert, 0, $newEntry);
             }
+            if(empty($leaderboardData)){
+                $leaderboardData = $newEntry;
+            }
+            else{
+                array_splice($leaderboardData, $positionToInsert, 0, $newEntry);
+            }
+            
+            //Save the new json to the file
+            $fp = fopen('./data/leaderboard.json', 'w');
+            fwrite($fp, json_encode($leaderboardData,JSON_PRETTY_PRINT));
+            fclose($fp);
+
         }
     }
     
@@ -71,15 +85,17 @@
             
             
                 <?php  //needs to be php as the leadboard is stored server-side.
-                    
-                    foreach($_SESSION['leaderboard'] as $position => $entry){
-                        $actualPosition = $position +1;
-                        echo    "<tr>
+                    $leaderboardData = json_decode(file_get_contents('./data/leaderboard.json'), true);
+                    if(!empty($leaderboardData)){
+                        foreach($leaderboardData as $position => $entry){
+                            $actualPosition = $position + 1;
+                            echo    "<tr>
                                     <td>{$actualPosition}</td>
                                     <td>{$entry['points']}</td>
                                     <td>{$entry['time']}</td>
                                     <td>{$entry['username']}</td>
                                 </tr>";
+                        }
                     }
                     
                 ?>

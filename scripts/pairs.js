@@ -193,7 +193,7 @@ function postScoreToLeaderboard(){
             'Content-Type' : 'application/json'
         },
         body: JSON.stringify({
-            'points':Game.points,
+            'points':Game.points,//Game.points,
             'time':Game.totalTime
         })
     }).then(response => console.log(response.json()));
