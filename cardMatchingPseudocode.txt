@@ -1,0 +1,27 @@
+When a cell is clicked the cardClicked function is called.
+
+make a 'cardsTurnedOver' array - shows the cards that have been clicked on and are a potential match.
+new flag called 'potentialMatch'
+
+on each cardClicked event.
+
+check if the card has recently clicked (the card is already turned over and is showing - so it doesn't turn back over) and if it hasn't been, then:
+(e.g. if(card is not in cardsTurnedOver){})
+    if(potentialMatch is false){
+        flip over the previous cards in cardsTurnedOver - add 'hideCard' to each imgs class and removing showCard class (iterate over each child of cardsTurnedOver)
+        clear cardsTurnedOver array.
+        set potentialMatch to true.
+    }
+    add cellClicked to cardsTurnedOver
+
+    check for a match:
+    if(length of cardsTurnedOver > 1):
+	    iterate over cardsTurnedOver array - if they all match: comparing each img.src
+		if the length of cardsTurnedOver equals 'numberOfCardsToMatch' (numberOfCardsToMatch is the last digit in the cells id) then remove all event listeners from the clicked cells, 
+		    add points to the tally, and add cardsTurnedOver array to the matchedCells array.
+		else:
+		    set potentialMatch to true
+	    If no match:
+		set potentialMatch to false.
+
+

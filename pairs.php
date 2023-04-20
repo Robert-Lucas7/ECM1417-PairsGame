@@ -21,10 +21,7 @@
     <?php include("navbar.php")?>
     <div id="main">
         
-        <!--<img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">-->
-        <?php
-            print_r($_SESSION);
-        ?>
+        <img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">
         
         <div id="gameAreaDiv" class="center">
             
