@@ -94,10 +94,10 @@
         </script>
     </head>
     <body>
-        
+        <!-- user profile information should be stored in cookies-->
         <?php include("navbar.php")?>
         <div id="main">
-            <!--<img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">-->
+            <img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">
             <div id="headingAndForm">
                 <h1>Register here</h1>
                 <form id="registrationForm" onsubmit="return ValidateUsername()" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"><!--the action submits the form data to the same page, htmlspecialchars() prevents XSS attacks, $_SERVER["PHP_SELF"] gets the name of the currently executing script.-->

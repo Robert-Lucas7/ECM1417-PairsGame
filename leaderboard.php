@@ -10,7 +10,7 @@
             // ==================================================================  JSON FILE IMPLEMENTATION  ==============================================================================
             //Get contents of the file
             /*
-            Should be structured like:
+            Should be structured like:   ----position is implicit (the index of the entry)
             {
                 position1 : {
                     points: numPoints,
@@ -68,11 +68,11 @@
         
         <?php include("navbar.php")?>
         
-        
+        <img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">
         <div id="main">
         
 
-            <!--<img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">-->
+            
             <h1>Leaderboard</h1>
             <!-- MAKE THE ACTUAL LEADERBOARD HERE-->
             <table id="leaderboardTable">

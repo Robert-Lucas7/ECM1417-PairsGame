@@ -25,7 +25,7 @@
         <?php include("./navbar.php")?>
         <!--<div id="navbarDiv"></div>-->
         <div id="main">
-            <!--<img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">    -->
+            <img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">   
             <div class="center"> <!-- Find out how to make this div to be the size of the viewport - the height of the navbar-->
             <?php
                 if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true){

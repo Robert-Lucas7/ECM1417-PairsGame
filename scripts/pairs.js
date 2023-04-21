@@ -95,7 +95,7 @@ const Game = {//Variables needed for the pairs game. They are declared in an obj
     matchedCells:[],
     cardsTurnedOver : [], //This will have a maximum of 3 cells in it at a time (for matching pairs - clickedCells.length == number of cards to match + 1).
     potentialMatch : true,
-    //wasMatch:false,
+    previousBestScore : 0,
     points:0,
     startTime:0,
     levelFinished : false,
@@ -262,7 +262,33 @@ function setupGameForLevel(){
 }
 function PlayGame(event){
     //Add the points and timer heading.
+    //Get and set the previous best score for the current level to the Game object.
+    /*$leaderboardData = json_decode(file_get_contents('./data/leaderboard.json'), true); // this should be an array of arrays (length 5)
+    if(!empty($leaderboardData)){
+        $currentLevelEntries = $leaderboardData[Game.currentLevel];
+        if(!empty($currentLevelEntries)){
+            Game.previousBestScore = $currentLevelEntries[0]["points"];
+        } else{
+            Game.previousBestScore = -1; // negative so the div is always gold.
+            //Set div to gold here as the updatePoints() function isn't called straight away.
+            let gameAreaDiv = document.getElementById('gameAreaDiv');
+            gameAreaDiv.style.setProperty('background-color', '#FFD700');
+        }*/
     
+    fetch('./data/leaderboard.json')
+        .then((response) => response.json())
+        .then((leaderboardData) => {
+            console.log(leaderboardData);
+            if(leaderboardData[Game.currentLevel].length > 0){
+                Game.previousBestScore = leaderboardData[Game.currentLevel][0]['points'];
+            } else{
+                Game.previousBestScore = -1;
+                let gameAreaDiv = document.getElementById('gameAreaDiv');
+                gameAreaDiv.style.setProperty('background-color', '#FFD700');
+            }
+        }) //look into validating the JSON file - check if it's empty etc.
+        .catch((error) => console.log(error));
+
     if(document.getElementById('pointsHeading') === null && document.getElementById('timerHeading') === null){
         let pointsHeading = document.createElement('h1');
         let timerHeading = document.createElement('h1');
@@ -318,4 +344,17 @@ function updateTimer(){
 function updatePoints(){
     let pointsHeading = document.getElementById('pointsHeading');
     pointsHeading.innerHTML = `Points: ${Game.points}`;
+    let gameAreaDiv = document.getElementById('gameAreaDiv');
+    let divColour = window.getComputedStyle(gameAreaDiv, null).getPropertyValue("background-color");
+    
+    console.log("divColour");
+    console.log(divColour);
+    console.log(divColour === "rgb(128, 128, 128)"); //FIND A BETTER WAY TO COMPARE THE COLOURS
+    
+    if(divColour === "rgb(255, 215, 0)" && Game.points < Game.previousBestScore){
+        gameAreaDiv.style.setProperty("background-color", "#808080");
+    }
+    else if(divColour === "rgb(128, 128, 128)" && Game.points > Game.previousBestScore){
+        gameAreaDiv.style.setProperty("background-color", "#FFD700");
+    }
 }
