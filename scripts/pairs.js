@@ -101,9 +101,10 @@ const Game = {//Variables needed for the pairs game. They are declared in an obj
     levelFinished : false,
     timerInterval : null,
     currentSecond : 0,
-    totalTime:null,
+    totalTimes:[],
     startNumberOfCards : 6,
-    currentLevel : 0 //Levels start from zero (so the number of cards in the first level is equal to the number of cards declared in 'startNumberOfCards')
+    currentLevel : 0, //Levels start from zero (so the number of cards in the first level is equal to the number of cards declared in 'startNumberOfCards'),
+    levelScores : []
 
 }
 
@@ -180,7 +181,7 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
 
                 let bannerTiming = document.createElement('h1');
                 let totalTime = ((Date.now() - Game.startTime)/1000).toFixed(2);
-                Game.totalTime = totalTime;
+                Game.totalTimes.push(totalTime);
                 bannerTiming.innerHTML = `Completed in: ${totalTime} seconds`
                 banner.append(bannerHeading);
                 banner.append(bannerTiming);
@@ -193,7 +194,8 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
                 //Create a submit score button here
                 //=====================  THIS WILL HAPPEN AT THE END OF THE GAME - NOT AT THE END OF THE LEVEL  ============================================
                 
-                
+                //Add level score to the Game.levelScores array
+                Game.levelScores.push(Game.points);
                 if(Game.currentLevel === 4){ //the 5th level has been completed
                     // ===================  NEED TO REMOVE THE 'submit button' FROM SHOWING AFTER THE 'play again' button has been clicked  ====================================
                     playPairsBtn.innerHTML = "Play again"; //"Play again";
@@ -228,15 +230,22 @@ function postScoreToLeaderboard(){
             'Content-Type' : 'application/json'
         },
         body: JSON.stringify({
-            'points':Game.points,//Game.points,
-            'time':Game.totalTime
+            'levelScores':Game.levelScores,//Game.points,
+            'totalTimes':Game.totalTimes
         })
     }).then(response => console.log(response.json()));
+    //Then remove the event listener from the submit score button (the the same score isn't submitted more than once).
+    let submitScoreBtn = document.getElementById('submitScoreButton');
+    if(submitScoreBtn !== null){
+        submitScoreBtn.removeEventListener('click', postScoreToLeaderboard);
+    }
+    
     
 }
 
 function resetGame(event){
     //Remove the previous cells of the table (empty the table), then call PlayGame() to setup the board again.
+
     let banner = document.getElementById('winBanner');
     banner.remove();
     let table = document.getElementById('cardTable');
@@ -246,6 +255,14 @@ function resetGame(event){
     table.replaceChildren(); //removes all children from the table element.
     //Reset all of the Game object properties here:
     
+    //if the submit score button exists, remove it from the DOM.
+    let submitScoreBtn = document.getElementById('submitScoreButton');
+    if(submitScoreBtn !== null){
+        submitScoreBtn.remove();
+    }
+    if(Game.currentLevel === 4){
+        Game.currentLevel = 0;
+    }
     Game.clicks = 0;
     Game.clickedCells = [];
     Game.matchedCells = [];
@@ -263,27 +280,17 @@ function setupGameForLevel(){
 function PlayGame(event){
     //Add the points and timer heading.
     //Get and set the previous best score for the current level to the Game object.
-    /*$leaderboardData = json_decode(file_get_contents('./data/leaderboard.json'), true); // this should be an array of arrays (length 5)
-    if(!empty($leaderboardData)){
-        $currentLevelEntries = $leaderboardData[Game.currentLevel];
-        if(!empty($currentLevelEntries)){
-            Game.previousBestScore = $currentLevelEntries[0]["points"];
-        } else{
-            Game.previousBestScore = -1; // negative so the div is always gold.
-            //Set div to gold here as the updatePoints() function isn't called straight away.
-            let gameAreaDiv = document.getElementById('gameAreaDiv');
-            gameAreaDiv.style.setProperty('background-color', '#FFD700');
-        }*/
     
     fetch('./data/leaderboard.json')
         .then((response) => response.json())
         .then((leaderboardData) => {
-            console.log(leaderboardData);
+            
+            let gameAreaDiv = document.getElementById('gameAreaDiv');
             if(leaderboardData[Game.currentLevel].length > 0){
                 Game.previousBestScore = leaderboardData[Game.currentLevel][0]['points'];
+                gameAreaDiv.style.setProperty('background-color', '#808080');
             } else{
                 Game.previousBestScore = -1;
-                let gameAreaDiv = document.getElementById('gameAreaDiv');
                 gameAreaDiv.style.setProperty('background-color', '#FFD700');
             }
         }) //look into validating the JSON file - check if it's empty etc.

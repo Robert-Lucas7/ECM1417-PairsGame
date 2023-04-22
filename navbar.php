@@ -3,6 +3,9 @@
 
         //Get the children of each li element in ul.
         //use a switch statement to see what the current page is (e.g. pairs.html - this will be pairs.php)
+
+        //CHECK IF "LoggedIn" is set as a session variable.
+
         //============ SEE IF THERE IS A MORE EFFICIENT WAY TO DO THIS ================
         document.addEventListener("DOMContentLoaded", function(){
             let currentPage = location.pathname.split("/").splice(-1)[0];
