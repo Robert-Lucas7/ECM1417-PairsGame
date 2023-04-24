@@ -1,0 +1,2 @@
+Registration.php
+center the div with the form

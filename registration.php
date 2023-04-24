@@ -106,16 +106,19 @@ if (!empty($_POST['username']) && !empty($_POST['avatarColour']) && !empty($_POS
     <div id="main">
         <img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">
         <div class="container-fluid">
-            <div class="row">
-                <div  class="col-7"><!--id="headingAndForm"-->
-                    <h1>Register here</h1>
+        <div class="row">
+            <h1>Register here</h1>
+        </div>    
+        <div class="row">
+                <div  class="col-md-7"><!--at small breakpoint the preview is stacked.-->
+                    
                     <form id="registrationForm" onsubmit="return ValidateUsername()" method="post"
                         action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                         <!--the action submits the form data to the same page, htmlspecialchars() prevents XSS attacks, $_SERVER["PHP_SELF"] gets the name of the currently executing script.-->
                         
                         <div class="form-group row">
                             <label for="username" class="col-2 col-form-label">Username: </label>
-                            <div class="col">
+                            <div class="col-md">
                                 <input type="text" name="username" placeholder="Enter username here..." id="usernameInput"
                                     class="form-control">
                             </div>
@@ -220,32 +223,32 @@ if (!empty($_POST['username']) && !empty($_POST['avatarColour']) && !empty($_POS
                             </div>
                             <div class="col">
                                 <label>
-                                    <input type="radio" name="avatarMouth" value="sad" checked>
+                                    <input type="radio" name="avatarMouth" value="sad">
                                     <img   src="./images/emoji assets/mouth/sad.png" class="eyesAndMouth">
                                 </label>
                             </div>
                             <div class="col">
                                 <label>
-                                    <input type="radio" name="avatarMouth" value="smiling" checked>
+                                    <input type="radio" name="avatarMouth" value="smiling">
                                     <img   src="./images/emoji assets/mouth/smiling.png" class="eyesAndMouth">
                                     <img>
                                 </label>
                             </div>
                             <div class="col">
                                 <label>
-                                    <input type="radio" name="avatarMouth" value="straight" checked>
+                                    <input type="radio" name="avatarMouth" value="straight">
                                     <img   src="./images/emoji assets/mouth/straight.png" class="eyesAndMouth">
                                 </label>
                             </div>
                             <div class="col">
                                 <label>
-                                    <input type="radio" name="avatarMouth" value="surprise" checked>
+                                    <input type="radio" name="avatarMouth" value="surprise">
                                     <img   src="./images/emoji assets/mouth/surprise.png" class="eyesAndMouth">
                                 </label>
                             </div>
                             <div class="col">
                                 <label>
-                                    <input type="radio" name="avatarMouth" value="teeth" checked>
+                                    <input type="radio" name="avatarMouth" value="teeth">
                                     <img   src="./images/emoji assets/mouth/teeth.png" class="eyesAndMouth">
                                 </label>
                             </div>
@@ -265,7 +268,7 @@ if (!empty($_POST['username']) && !empty($_POST['avatarColour']) && !empty($_POS
                     
                 </div>
             
-                <div class="col" style="position:relative"">
+                <div class="col" id="avatarPreview">
                     <img class="avatarImages" id="avatarColourImg" src="./images/emoji assets/skin/green.png">
                     <img class="avatarImages" id="avatarMouthImg" src="./images/emoji assets/mouth/open.png">
                     <img class="avatarImages" id="avatarEyesImg" src="./images/emoji assets/eyes/closed.png">

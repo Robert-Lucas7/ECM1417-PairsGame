@@ -1,58 +1,64 @@
-#avatarColourImg{
-    z-index: -1;
+#avatarColourImg {
+  z-index: -1;
 }
-.avatarImages{
-    position:absolute;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 75%;
+
+.avatarImages {
+  position: absolute;
+  width:100%;
+
 }
+
 #headingAndForm {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width:50%;
-    text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  text-align: center;
+}
+
+#avatarPreview {
+  position: relative;
+}
+
+h1 {
+  text-align: center;
+}
+
+.usernameValidation li {
+  color: red;
+  display: none;
+}
+
+label {
+  color: white;
+  text-align: center;
+}
+
+[type=radio] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+[type=radio]+img {
+  cursor: pointer;
+  width: 100%;
+}
+
+/* CHECKED STYLES */
+[type=radio]:checked+img {
+  outline: 2px solid #f00;
+}
+
+.whiteBackground {
+  width: 100%;
+  z-index: -1;
+  position: absolute;
 }
 
 
-h1{
-    text-align:center;
-}
-.usernameValidation li{
-    color: red;
-    display: none;
-}
-label{
-    color: white;
-    text-align:center;
-}
-
-[type=radio] { 
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  
-  /* IMAGE STYLES */
-  [type=radio] + img {
-    cursor: pointer;
-    width:100%;
-  }
- 
-  /* CHECKED STYLES */
-  [type=radio]:checked + img {
-    outline: 2px solid #f00;
-  }
-  .whiteBackground{
-    width:100%;
-    z-index: -1;
-    position: absolute;
-  }
-
-
-.eyesAndMouth{
-    background-color: #FFFFFF;
+.eyesAndMouth {
+  background-color: #FFFFFF;
 }
