@@ -18,46 +18,34 @@ function setupGameArea(numberOfCards, canMatch3Or4Cards){
         let rndEyeIndex = Math.floor(Math.random() * eyes.length);
         let rndMouthIndex = Math.floor(Math.random() * mouths.length);
 
-        //TIDY THE NEXT FEW LINES UP
-        let numCardsToMatch = 2;
-        let differenceInNumOfCards = numberOfCards - cards.length;
-        if(differenceInNumOfCards <= 4 && canMatch3Or4Cards){
-            numCardsToMatch = differenceInNumOfCards;
-        }
-        else if(canMatch3Or4Cards){ // as if it is 5, a 4 card match shouldn't be added as it would leave a singular card as a match.
-            if(differenceInNumOfCards > 5){
-                numCardsToMatch = Math.floor( Math.random() * (4 - 2 + 1)) + 2; //Gets a random number from: 2,3
-            } else{ //if there are 5 cards remaining, then choose 2 or 3 cards to match.
-                numCardsToMatch = Math.floor( Math.random() * (3 - 2 + 1)) + 2;
-            }
-            
-        }
-    
-        for(let j = 0;j<numCardsToMatch;j++){
-            var colourImg = document.createElement('img');
-            var eyesImg = document.createElement('img');
-            var mouthImg = document.createElement('img');
-            eyesImg.classList = 'eyesOrMouthCard hideCard';
-            mouthImg.classList = 'eyesOrMouthCard hideCard';
-            colourImg.classList = 'eyesOrMouthCard hideCard';
-            
-            colourImg.src = `./images/emoji assets/skin/${colours[rndColourIndex]}.png`;
-            eyesImg.src = `./images/emoji assets/eyes/${eyes[rndEyeIndex]}.png`;
-            mouthImg.src = `./images/emoji assets/mouth/${mouths[rndMouthIndex]}.png`;
-            let card = {colour:colourImg, eyes:eyesImg, mouth:mouthImg, numCardsToMatch:numCardsToMatch};
-            //======================== DUPLICATES CAN BE ADDED FOR SOME REASON, HAVE A LOOK AT THIS =======================================
-            /*
-            LOOK AT:*/
+        let card = {
+            colour:`./images/emoji assets/skin/${colours[rndColourIndex]}.png`, 
+            eyes:`./images/emoji assets/eyes/${eyes[rndEyeIndex]}.png`, 
+            mouth:`./images/emoji assets/mouth/${mouths[rndMouthIndex]}.png`
+        };
+        
             var contains = cards.some(elem => {
-                return (card.colour === elem.colour && card.eyes === elem.eyes && card.mouth === elem.mouth);
-            });
-            
-            if(!contains){//Makes sure there aren't already the same pair of cards in the cards array.
-                cards.push(card);
-            } else{
-                j--;
+            return (card.colour === elem.colour && card.eyes === elem.eyes && card.mouth === elem.mouth);
+        });
+        
+        if(!contains){//Makes sure there aren't already the same pair of cards in the cards array.
+            let numCardsToMatch = 2;
+            let differenceInNumOfCards = numberOfCards - cards.length;
+            if(differenceInNumOfCards <= 4 && canMatch3Or4Cards){
+                numCardsToMatch = differenceInNumOfCards;
             }
-            
+            else if(canMatch3Or4Cards){ // as if it is 5, a 4 card match shouldn't be added as it would leave a singular card as a match.
+                if(differenceInNumOfCards > 5){
+                    numCardsToMatch = Math.floor( Math.random() * (4 - 2 + 1)) + 2; //Gets a random number from: 2,3
+                } else{ //if there are 5 cards remaining, then choose 2 or 3 cards to match.
+                    numCardsToMatch = Math.floor( Math.random() * (3 - 2 + 1)) + 2;
+                }
+                
+            }
+            card.numCardsToMatch = numCardsToMatch;
+            for(let j = 0;j<numCardsToMatch;j++){
+                cards.push(card);
+            }
         }
     }
     // console.log(cards);
@@ -74,14 +62,20 @@ function setupGameArea(numberOfCards, canMatch3Or4Cards){
             let rndCard = cards[rndNum];
             cards.splice(rndNum, 1); //removes the card at index rndNum from cards array.
             let td = document.createElement("td");
-            td.id = `td${i}${j}${rndCard.numCardsToMatch}`; //each id in form 'td{row}{column}{numberOfCardsToMatch}'
-            td.style.position = 'relative';
-            rndCard.eyes.classList.add(`${td.id}`);
-            rndCard.mouth.classList.add(`${td.id}`);
-            rndCard.colour.classList.add(`${td.id}`);
-            td.append(rndCard.colour);
-            td.append(rndCard.eyes);
-            td.append(rndCard.mouth);
+            let card = document.createElement("div");
+            card.id = `card${i}${j}${rndCard.numCardsToMatch}`;
+            card.classList.add("flip-card");
+            card.innerHTML = `<div class="flip-card-inner">
+                                <div class="flip-card-front">
+
+                                </div>
+                                <div class="flip-card-back">
+                                    <img src="${rndCard.colour}" alt="Avatar" class="eyesOrMouthCard">
+                                    <img src="${rndCard.eyes}" alt="Avatar" class="eyesOrMouthCard">
+                                    <img src="${rndCard.mouth}" alt="Avatar" class="eyesOrMouthCard">
+                                </div>
+                            </div>`;
+            td.append(card);
             row.append(td);
             j++;
         }
@@ -103,40 +97,38 @@ const Game = {//Variables needed for the pairs game. They are declared in an obj
     currentSecond : 0,
     totalTimes:[],
     startNumberOfCards : 6,
-    currentLevel : 0, //Levels start from zero (so the number of cards in the first level is equal to the number of cards declared in 'startNumberOfCards'),
+    currentLevel : 4, //Levels start from zero (so the number of cards in the first level is equal to the number of cards declared in 'startNumberOfCards'),
     levelScores : []
 
 }
 
 function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pushed) to the Game.cardsClicked array properly and that the display properties are the correct value.
-    clickedCard = event.currentTarget;
-
+    clickedCard = event.currentTarget.id;
+    //make Game.cardsTurnedOver to be the id of the cards clicked.
     console.log(!Game.cardsTurnedOver.includes(clickedCard));
 
     if(!Game.cardsTurnedOver.includes(clickedCard)){
         if(!Game.potentialMatch){
-            Game.cardsTurnedOver.forEach(cellElement => {//iterating over the cells that are currently turned over and flipping them back over.
-                let imgs = cellElement.children;//each cell element has 3 children (all img elements)
+            Game.cardsTurnedOver.forEach(cardId => {//iterating over the cells that are currently turned over and flipping them back over.
+                /*let imgs = cellElement.children;//each cell element has 3 children (all img elements)
                 for(let i =0;i<3;i++){
                     imgs[i].classList.remove('showCard');
                     imgs[i].classList.add('hideCard');
-                }
+                }*/
+                document.getElementById(cardId).children[0].classList.remove("rotate");
             });
             Game.cardsTurnedOver = [];
             Game.potentialMatch = true;
         }
         Game.cardsTurnedOver.push(clickedCard);
-        let imgs = clickedCard.children;//each cell element has 3 children (all img elements)
-        for(let i =0;i<3;i++){
-            imgs[i].classList.add('showCard');
-            imgs[i].classList.remove('hideCard');
-        }
-
+        document.getElementById(clickedCard).children[0].classList.add("rotate");
         if(Game.cardsTurnedOver.length > 1){
             let isPotentialMatch = true;
             for(let i=1;i<Game.cardsTurnedOver.length;i++){
                 for(let j=0;j<3;j++){
-                    if(Game.cardsTurnedOver[i].children[j].src !== Game.cardsTurnedOver[0].children[j].src){
+                    //console.log(Game.cardsTurnedOver[i].children[0]);
+                    let card = document.getElementById(Game.cardsTurnedOver[i]);
+                    if(card.children[0].children[1].children[j].src !== document.getElementById(Game.cardsTurnedOver[0]).children[0].children[1].children[j].src){
                         isPotentialMatch = false;
                         break;
                     }
@@ -147,10 +139,10 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
                 
             }
             if(isPotentialMatch){
-                if(parseInt(Game.cardsTurnedOver[0].id.slice(-1)) === Game.cardsTurnedOver.length) { //A complete match has occurred
+                if(parseInt(Game.cardsTurnedOver[0].slice(-1)) === Game.cardsTurnedOver.length) { //A complete match has occurred / last digit of the id is the number of occurrences.
                     //Can take any cell element in cardsTurnedOver as they are all the same card and will have the same length.
-                    Game.cardsTurnedOver.forEach(cellElement => {
-                        cellElement.removeEventListener('click', cardClicked)
+                    Game.cardsTurnedOver.forEach(cardId => {
+                        document.getElementById(cardId).removeEventListener('click', cardClicked)
                     });
                     Game.points += 20;
                     updatePoints();
@@ -324,12 +316,13 @@ function PlayGame(event){
     for(let i =0;i<rows.length;i++){
         let cells = rows[i].children;
         for(let j=0;j<cells.length;j++){
-            cells[j].addEventListener('click', cardClicked);
+            cells[j].children[0].addEventListener('click', cardClicked);
         }
     }
 
     Game.startTime = Date.now();
     Game.timerInterval = setInterval(updateTimer,10);
+    
 }
 function updateTimer(){
     let timer = document.getElementById("timerHeading");

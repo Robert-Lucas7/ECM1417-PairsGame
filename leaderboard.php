@@ -120,19 +120,19 @@
             
             
                 <?php  //needs to be php as the leadboard is stored server-side.
-                    /*$leaderboardData = json_decode(file_get_contents('./data/leaderboard.json'), true);
-                    // var_dump($leaderboardData);
+                    $leaderboardData = json_decode(file_get_contents('./data/leaderboard.json'), true);
+                    
                     if(!empty($leaderboardData[5])){
                         foreach($leaderboardData[5] as $position => $entry){
                             $actualPosition = $position + 1;
                             echo    "<tr>
                                     <td>{$actualPosition}</td>
                                     <td>{$entry['points']}</td>
-                                    <td>{$entry['time']}</td>
                                     <td>{$entry['username']}</td>
+                                    <td>{$entry['time']}</td>
                                 </tr>";
                         }
-                    }*/
+                    }
                     
                 ?>
             </table>

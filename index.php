@@ -72,8 +72,8 @@ session_start();
         }
     </style>
     <script>
-        function flipCard(){
-            let card = document.getElementById("myCard");
+        function flipCard(event){
+            let card = event.currentTarget;
             let inner = card.children[0];
             if(inner.classList.contains("rotate")){
                 inner.classList.remove("rotate");
@@ -116,8 +116,30 @@ session_start();
             </div>-->
             <!-- END OF DEMO-->
 
+            <table >
+                <tr>
+                    <td style="padding:50px;"> 
+            <div class="flip-card" onclick="flipCard(event)">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
 
-            <div class="flip-card" onclick="flipCard()" id="myCard">
+                    </div>
+                    <div class="flip-card-back" style="position:relative;height:100%;width:100%;">
+
+
+                        <img src="./images/emoji assets/skin/green.png" alt="Avatar"
+                            style="position:absolute;width:100%;height:100%;inset:0;">
+                        <img src="./images/emoji assets/eyes/closed.png" alt="Avatar"
+                            style="position:absolute;width:100%;height:100%;inset:0;">
+                        <img src="./images/emoji assets/mouth/open.png" alt="Avatar"
+                            style="position:absolute;width:100%;height:100%;inset:0;">
+                    </div>
+
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="flip-card" onclick="flipCard(event)">
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
 
@@ -135,6 +157,9 @@ session_start();
 
                 </div>
             </div>
+        </td>
+        </tr>
+        </table>
         </div>
 </body>
 
