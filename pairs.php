@@ -25,12 +25,12 @@
         
         <div id="gameAreaDiv" class="center">
             
-            <table id="cardTable">
+            <!--<table id="cardTable">-->
 
             </table>
-            <div id="buttonDiv">
-                <button id="playPairsbtn" class="btn btn-primary buttons">Play Pairs</button>
-            </div>
+            
+                <button id="playPairsbtn" class="btn">Play Pairs</button>
+            
             
         </div>
     </div>

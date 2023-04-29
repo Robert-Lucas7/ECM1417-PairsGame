@@ -36,13 +36,9 @@
                 }
             }
         });
-        
-        
-        //==================== GETTING DETAILS ABOUT THE EMOJI HERE (type of skin, eyes, mouth) ============================
-        
     </script>
 <!--Instead of two lists use a flexbox with 2 columns-->
-<div role="navigation" class="navbar navbar-expand navbar-dark" id="navbarDiv">
+<nav role="navigation" class="navbar navbar-expand navbar-dark " id="navbarDiv">
     <ul class="navbar-nav me-auto">
         <li name="home" class="nav-item">
             <a href="index.php" class="nav-link active">Home</a>
@@ -53,7 +49,7 @@
         <!-- Only one of these options should show depending on if the user is already registered. Check here using php (server-side) to see if user is logged in-->
         <!-- For now v-->
     </ul>
-    <ul class="navbar-nav ms-auto">
+    <ul class="navbar-nav ms-auto ">
         <li name='memory' class='nav-item'>
             <a href='pairs.php' class='nav-link'>Play Pairs</a>
         </li>
@@ -89,5 +85,5 @@
     ?>
 
     
-</div>
+</nav>
 

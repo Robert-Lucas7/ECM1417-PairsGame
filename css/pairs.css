@@ -5,21 +5,15 @@
     height: 75%;
     width: 75%;
     margin: auto;
-    position: absolute;
+    position: relative;
     bottom: 5%;
     left:0;
     right:0;
 }
-.buttons{
-    width: fit-content;
-    height: fit-content;
-    padding: 10px;
-    position:relative;
-    z-index: 1;
-}
-#playPairsBtn {
-    
-    
+#playPairsBtn{
+    z-index:1;
+    background-color:royalblue;
+    color:white;
 }
 html{
     height:100%;    
@@ -31,23 +25,20 @@ html{
 }
 #cardTable td{
     margin: 20px;
-    cursor: pointer;
     text-align:center;
     
 }
-#cardTable td{
-    
-}
+
 
 .colourCard{
     width: 100%;
 }
 .eyesOrMouthCard{
    position: absolute;
-   top: 0;
-   left: 0;
-   width:100%;
-   height:100%;
+   inset: 0;
+   margin: auto;
+   width:75%;
+   height:75%;
 }
 .hideCard{
     display: none;
@@ -61,21 +52,32 @@ html{
 .showTable{
     display: table;
 }
+
 #winBanner{
     height: 100%;
     width: 100%;
-    background-color: greenyellow;
+    background-color: #89CFF0;
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 0;
+    text-align: center;
 }
+.winBannerAnimation{
+    animation-name: fadein;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+}
+@keyframes fadein{
+    from {opacity: 0;}
+    to{opacity:1;}
+}
+
 /* The flip card container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
 .flip-card {
     width: 100%;
     height: 100%;
-    border-radius: 20%;
     padding: 5%;
+    cursor: pointer;
 }
 
 /* This container is needed to position the front and back side */
@@ -102,11 +104,11 @@ html{
     -webkit-backface-visibility: hidden;
     /* Safari */
     backface-visibility: hidden;
+    border-radius:25px;
 }
 
 .flip-card-front {
     background-color: white;
-    border-radius: 20%;
 }
 
 /* Style the back side */
@@ -114,5 +116,15 @@ html{
 
     background-color: blue;
     transform: rotateY(180deg);
-    border-radius:20%;
+}
+
+
+.headings{
+    
+    background-image: linear-gradient(to bottom right,#89CFF0, #000080);
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 20px;
+    width:75%;
 }

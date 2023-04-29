@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', function(){
     document.getElementById("playPairsbtn").addEventListener("click", PlayGame);
 });
-
-
 function setupGameArea(numberOfCards, canMatch3Or4Cards){
     //Using a few arrays of potential attributes for the colour, eyes, and mouth
     let colours = ["green", "red", "yellow"]; //initialise these arrays with array literal notation.
@@ -97,7 +95,7 @@ const Game = {//Variables needed for the pairs game. They are declared in an obj
     currentSecond : 0,
     totalTimes:[],
     startNumberOfCards : 6,
-    currentLevel : 4, //Levels start from zero (so the number of cards in the first level is equal to the number of cards declared in 'startNumberOfCards'),
+    currentLevel : 0, //Levels start from zero (so the number of cards in the first level is equal to the number of cards declared in 'startNumberOfCards'),
     levelScores : []
 
 }
@@ -110,11 +108,6 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
     if(!Game.cardsTurnedOver.includes(clickedCard)){
         if(!Game.potentialMatch){
             Game.cardsTurnedOver.forEach(cardId => {//iterating over the cells that are currently turned over and flipping them back over.
-                /*let imgs = cellElement.children;//each cell element has 3 children (all img elements)
-                for(let i =0;i<3;i++){
-                    imgs[i].classList.remove('showCard');
-                    imgs[i].classList.add('hideCard');
-                }*/
                 document.getElementById(cardId).children[0].classList.remove("rotate");
             });
             Game.cardsTurnedOver = [];
@@ -177,12 +170,16 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
                 bannerTiming.innerHTML = `Completed in: ${totalTime} seconds`
                 banner.append(bannerHeading);
                 banner.append(bannerTiming);
-
+                banner.classList.add("winBannerAnimation");
                 document.getElementById('gameAreaDiv').appendChild(banner);
-                document.getElementById("cardTable").classList.add("hide");
-                let playPairsBtn = document.getElementById("playPairsbtn");
-                clearInterval(Game.timerInterval);
 
+                let table = document.getElementById("cardTable");
+                table.classList.add("hide");
+                table.classList.remove("showTable");
+                let playPairsBtn = document.getElementById("playPairsbtn");
+                playPairsBtn.classList.add("winBannerAnimation");
+                clearInterval(Game.timerInterval);
+                setGameAreaBackgroundColour(true); //So there isn't a flash of gold.
                 //Create a submit score button here
                 //=====================  THIS WILL HAPPEN AT THE END OF THE GAME - NOT AT THE END OF THE LEVEL  ============================================
                 
@@ -272,7 +269,12 @@ function setupGameForLevel(){
 function PlayGame(event){
     //Add the points and timer heading.
     //Get and set the previous best score for the current level to the Game object.
-    
+    if(document.getElementById('cardTable') === null){//if table doesn't exist in the DOM then create it.
+        let table = document.createElement('table');
+        table.id = 'cardTable';
+        document.getElementById('gameAreaDiv').append(table);
+
+    }
     fetch('./data/leaderboard.json')
         .then((response) => response.json())
         .then((leaderboardData) => {
@@ -291,14 +293,21 @@ function PlayGame(event){
     if(document.getElementById('pointsHeading') === null && document.getElementById('timerHeading') === null){
         let pointsHeading = document.createElement('h1');
         let timerHeading = document.createElement('h1');
+        let headingDiv = document.createElement('div');
+        headingDiv.classList = "headings ";
         pointsHeading.id = "pointsHeading";
 
         
         timerHeading.id = "timerHeading";
         
         let mainDiv = document.getElementById('main');
-        mainDiv.append(pointsHeading);
-        mainDiv.append(timerHeading);
+        let gameAreaDiv = document.getElementById('gameAreaDiv');
+
+        headingDiv.append(pointsHeading);
+        headingDiv.append(timerHeading);
+        mainDiv.insertBefore(headingDiv, gameAreaDiv);
+        
+        
     }
     timerHeading.innerHTML = "Timer: 0";
     pointsHeading.innerHTML = "Points: 0";
@@ -344,17 +353,21 @@ function updateTimer(){
 function updatePoints(){
     let pointsHeading = document.getElementById('pointsHeading');
     pointsHeading.innerHTML = `Points: ${Game.points}`;
+    setGameAreaBackgroundColour(false);
+    
+}
+function setGameAreaBackgroundColour(setStraightToGrey){
     let gameAreaDiv = document.getElementById('gameAreaDiv');
     let divColour = window.getComputedStyle(gameAreaDiv, null).getPropertyValue("background-color");
-    
-    console.log("divColour");
-    console.log(divColour);
-    console.log(divColour === "rgb(128, 128, 128)"); //FIND A BETTER WAY TO COMPARE THE COLOURS
-    
-    if(divColour === "rgb(255, 215, 0)" && Game.points < Game.previousBestScore){
-        gameAreaDiv.style.setProperty("background-color", "#808080");
+    if(!setStraightToGrey){
+        if(divColour === "rgb(255, 215, 0)" && Game.points < Game.previousBestScore){
+            gameAreaDiv.style.setProperty("background-color", "#808080");
+        }
+        else if(divColour === "rgb(128, 128, 128)" && Game.points > Game.previousBestScore){
+            gameAreaDiv.style.setProperty("background-color", "#FFD700");
+        }
     }
-    else if(divColour === "rgb(128, 128, 128)" && Game.points > Game.previousBestScore){
+    else{
         gameAreaDiv.style.setProperty("background-color", "#FFD700");
     }
 }

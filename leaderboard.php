@@ -102,20 +102,20 @@
             
             <!-- MAKE THE ACTUAL LEADERBOARD HERE-->
             
-            <button id="btn0">Level 1</button>
-            <button id="btn1">Level 2</button>
-            <button id="btn2">Level 3</button>
-            <button id="btn3">Level 4</button>
-            <button id="btn4">Level 5</button>
-            <button id="btn5">Overall</button>
+            <button id="btn0" class="btn">Level 1</button>
+            <button id="btn1" class="btn">Level 2</button>
+            <button id="btn2" class="btn">Level 3</button>
+            <button id="btn3" class="btn">Level 4</button>
+            <button id="btn4" class="btn">Level 5</button>
+            <button id="btn5" class="btn">Overall</button>
             
             
-            <table id="leaderboardTable">
+            <table id="leaderboardTable" class="table"><!-- LOOK AT TABLE CLASS IN BOOTSTRAP-->
                 <tr class='leaderboardHeadings'>
-                    <th>Position</th>
-                    <th>Score</th>
-                    <th>Username</th>
-                    <th>Time</th>
+                    <th scope="col">Position</th>
+                    <th scope="col">Score</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Time</th>
                 </tr>
             
             

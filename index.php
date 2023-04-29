@@ -87,80 +87,21 @@ session_start();
 <body>
     <?php include("./navbar.php") ?>
     <!--<div id="navbarDiv"></div>-->
-    <div id="main">
+    <div id="main" class="center container">
         <img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">
-        <div class="center">
+        
             <!-- Find out how to make this div to be the size of the viewport - the height of the navbar-->
-            <?php
-            if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true) {
-                echo "<h1 id='heading'>Welcome to pairs!</h1> 
-                                <button id='playBtn' class='btn btn-primary'>Click here to play</button>
-                            </div>";
-            } else {
-                echo "<div class='d-flex flex-column center'>
-                                <p>You're not using a registered session? <a href='registration.php'>Register now</a></p>
-                            </div>";
-            }
-            ?>
-            <!-- demo of card-->
-            <!--<div class="" style="width:100px;height:200px;border-radius:20%;">
-                <div class="flip-card-inner" style="position:relative;width:100%;height:100%;">
-                    <div class="flip-card-front"style="position:absolute;">
-                        <img src="./images/emoji assets/skin/green.png" style="width:100%; height:100%;position:absolute;inset:0;">
-                        <img src="./images/emoji assets/eyes/closed.png" style="width:100%; height:100%;position:absolute;inset:0;">
-                        <img src="./images/emoji assets/mouth/straight.png" style="width:100%; height:100%;position:absolute;inset:0;">
-                    </div>
-                    <div class="flip-card-back">
-                    </div>
-                </div>
-            </div>-->
-            <!-- END OF DEMO-->
-
-            <table >
-                <tr>
-                    <td style="padding:50px;"> 
-            <div class="flip-card" onclick="flipCard(event)">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">
-
-                    </div>
-                    <div class="flip-card-back" style="position:relative;height:100%;width:100%;">
-
-
-                        <img src="./images/emoji assets/skin/green.png" alt="Avatar"
-                            style="position:absolute;width:100%;height:100%;inset:0;">
-                        <img src="./images/emoji assets/eyes/closed.png" alt="Avatar"
-                            style="position:absolute;width:100%;height:100%;inset:0;">
-                        <img src="./images/emoji assets/mouth/open.png" alt="Avatar"
-                            style="position:absolute;width:100%;height:100%;inset:0;">
-                    </div>
-
-                </div>
+            <div class="d-flex flex-column center">
+                <?php
+                if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true) {
+                    echo "<h1 id='heading'>Welcome to pairs!</h1>
+                        <button id='playBtn' class='btn btn-primary'>Click here to play</button>";
+                } else {
+                    echo "<p>You're not using a registered session? <br><a href='registration.php'>Register now</a></p>";
+                }
+                ?>
             </div>
-        </td>
-        <td>
-            <div class="flip-card" onclick="flipCard(event)">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">
-
-                    </div>
-                    <div class="flip-card-back" tyle="position:relative;height:100%;width:100%;">
-
-
-                        <img src="./images/emoji assets/skin/green.png" alt="Avatar"
-                            style="position:absolute;width:100%;height:100%;inset:0;">
-                        <img src="./images/emoji assets/eyes/closed.png" alt="Avatar"
-                            style="position:absolute;width:100%;height:100%;inset:0;">
-                        <img src="./images/emoji assets/mouth/open.png" alt="Avatar"
-                            style="position:absolute;width:100%;height:100%;inset:0;">
-                    </div>
-
-                </div>
-            </div>
-        </td>
-        </tr>
-        </table>
-        </div>
+        
 </body>
 
 </html>
