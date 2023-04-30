@@ -90,12 +90,13 @@ const Game = {//Variables needed for the pairs game. They are declared in an obj
     previousBestScore : 0,
     points:0,
     startTime:0,
-    levelFinished : false,
+    levelFinished : true,
     timerInterval : null,
     currentSecond : 0,
     totalTimes:[],
     startNumberOfCards : 6,
-    currentLevel : 0, //Levels start from zero (so the number of cards in the first level is equal to the number of cards declared in 'startNumberOfCards'),
+    currentLevel : 4, //Levels start from zero (so the number of cards in the first level is equal to the number of cards declared in 'startNumberOfCards'),
+    gameFinished : false,
     levelScores : []
 
 }
@@ -159,41 +160,49 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
                 updatePoints();
             }
             if(Game.levelFinished){
-                let banner = document.createElement('div');
-                banner.id = "winBanner";
+                let gameAreaDiv = document.getElementById("gameAreaDiv");
+                let centeredContent = document.getElementById("centeredContent");
+                // let banner = document.createElement('div');
+                // banner.id = "winBanner";
                 let bannerHeading = document.createElement('h1');
                 bannerHeading.innerHTML = `You won with ${Game.points} points!`;
 
                 let bannerTiming = document.createElement('h1');
                 let totalTime = ((Date.now() - Game.startTime)/1000).toFixed(2);
+
+                bannerHeading.classList.add("endOfLevelHeadings");
+                bannerTiming.classList.add("endOfLevelHeadings");
+
                 Game.totalTimes.push(totalTime);
                 bannerTiming.innerHTML = `Completed in: ${totalTime} seconds`
-                banner.append(bannerHeading);
-                banner.append(bannerTiming);
-                banner.classList.add("winBannerAnimation");
-                document.getElementById('gameAreaDiv').appendChild(banner);
+                // banner.append(bannerHeading);
+                // banner.append(bannerTiming);
+                centeredContent.prepend(bannerTiming);
+                centeredContent.prepend(bannerHeading);
+                
+                gameAreaDiv.classList.add("winBannerAnimation");
+                gameAreaDiv.style.setProperty("background-color", "#89CFF0");
+                // document.getElementById('gameAreaDiv').appendChild(banner);
 
                 let table = document.getElementById("cardTable");
                 table.classList.add("hide");
                 table.classList.remove("showTable");
                 let playPairsBtn = document.getElementById("playPairsbtn");
                 playPairsBtn.classList.add("winBannerAnimation");
-                clearInterval(Game.timerInterval);
-                setGameAreaBackgroundColour(true); //So there isn't a flash of gold.
-                //Create a submit score button here
-                //=====================  THIS WILL HAPPEN AT THE END OF THE GAME - NOT AT THE END OF THE LEVEL  ============================================
                 
-                //Add level score to the Game.levelScores array
+                clearInterval(Game.timerInterval);
+                //setGameAreaBackgroundColour(true); //So there isn't a flash of gold.
+               
                 Game.levelScores.push(Game.points);
                 if(Game.currentLevel === 4){ //the 5th level has been completed
-                    // ===================  NEED TO REMOVE THE 'submit button' FROM SHOWING AFTER THE 'play again' button has been clicked  ====================================
                     playPairsBtn.innerHTML = "Play again"; //"Play again";
                     let submitScoreBtn = document.createElement('button');
                     submitScoreBtn.innerHTML = 'Submit Score';
                     submitScoreBtn.id = 'submitScoreButton';
                     submitScoreBtn.classList = 'buttons btn btn-success';
                     submitScoreBtn.addEventListener("click", postScoreToLeaderboard);
-                    document.getElementById('buttonDiv').append(submitScoreBtn);
+                    playPairsBtn.after(submitScoreBtn);//winBanner
+                    Game.gameFinished = true;
                     
                 } else{
                     playPairsBtn.innerHTML = "Next Level";
@@ -201,7 +210,7 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
                 }
                 playPairsBtn.removeEventListener('click', PlayGame);
                 playPairsBtn.addEventListener('click', resetGame);
-                playPairsBtn.style.display = 'block';
+                playPairsBtn.style.display = 'inline-block';
             }
         }
     }
@@ -219,7 +228,7 @@ function postScoreToLeaderboard(){
             'Content-Type' : 'application/json'
         },
         body: JSON.stringify({
-            'levelScores':Game.levelScores,//Game.points,
+            'levelScores':Game.levelScores,
             'totalTimes':Game.totalTimes
         })
     }).then(response => console.log(response.json()));
@@ -235,8 +244,13 @@ function postScoreToLeaderboard(){
 function resetGame(event){
     //Remove the previous cells of the table (empty the table), then call PlayGame() to setup the board again.
 
-    let banner = document.getElementById('winBanner');
-    banner.remove();
+    let bannerHeadings = document.getElementsByClassName("endOfLevelHeadings");
+    while(bannerHeadings.length > 0){
+        bannerHeadings[0].remove();
+    }
+    
+    // let banner = document.getElementById('winBanner');
+    // banner.remove();
     let table = document.getElementById('cardTable');
     table.classList.remove('hide');
     table.classList.add('showTable');
@@ -249,9 +263,11 @@ function resetGame(event){
     if(submitScoreBtn !== null){
         submitScoreBtn.remove();
     }
-    if(Game.currentLevel === 4){
+    if(Game.gameFinished === true){
         Game.currentLevel = 0;
+        Game.gameFinished = false;
     }
+    
     Game.clicks = 0;
     Game.clickedCells = [];
     Game.matchedCells = [];
@@ -269,7 +285,7 @@ function setupGameForLevel(){
 function PlayGame(event){
     //Add the points and timer heading.
     //Get and set the previous best score for the current level to the Game object.
-    if(document.getElementById('cardTable') === null){//if table doesn't exist in the DOM then create it.
+    if(document.getElementById('cardTable') === null){//if table doesn't exist in the DOM then create it - on the first occurence.
         let table = document.createElement('table');
         table.id = 'cardTable';
         document.getElementById('gameAreaDiv').append(table);

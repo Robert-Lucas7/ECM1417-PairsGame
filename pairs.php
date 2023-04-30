@@ -23,14 +23,14 @@
         
         <img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">
         
-        <div id="gameAreaDiv" class="center">
+        <div id="gameAreaDiv" class="">
             
             <!--<table id="cardTable">-->
 
-            </table>
             
+            <div id="centeredContent">
                 <button id="playPairsbtn" class="btn">Play Pairs</button>
-            
+            </div>
             
         </div>
     </div>

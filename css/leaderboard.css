@@ -5,7 +5,7 @@
     width:100%;
     text-align: center;
 }
-#main{
+#contentDiv{
     background-color: grey;
     width: 75%;
     height:75%;
@@ -14,7 +14,7 @@
     margin: auto;
     box-shadow: 5px 5px #000000;
 }
-#main h1{
+#contentDiv h1{
     text-align: center;
 }
 #leaderboardTable th{
@@ -24,6 +24,6 @@
     border:2px solid black;
     border-collapse: separate;
 }
-.btn{
-    background-color: white;
+#contentDiv button{
+    background-color: #4C4E52;
 }

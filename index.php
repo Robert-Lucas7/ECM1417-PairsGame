@@ -97,7 +97,7 @@ session_start();
                     echo "<h1 id='heading'>Welcome to pairs!</h1>
                         <button id='playBtn' class='btn btn-primary'>Click here to play</button>";
                 } else {
-                    echo "<p>You're not using a registered session? <br><a href='registration.php'>Register now</a></p>";
+                    echo "<p>You're not using a registered session? <br><a href='registration.php'><b>Register now</b></a></p>";
                 }
                 ?>
             </div>

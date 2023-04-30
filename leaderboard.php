@@ -93,49 +93,50 @@
         
         <?php include("navbar.php")?>
         
-        <img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">
-        <div id="main">
         
+        <div id="main">
+            <img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">
 
-            
-            <h1>Leaderboard</h1>
-            
-            <!-- MAKE THE ACTUAL LEADERBOARD HERE-->
-            
-            <button id="btn0" class="btn">Level 1</button>
-            <button id="btn1" class="btn">Level 2</button>
-            <button id="btn2" class="btn">Level 3</button>
-            <button id="btn3" class="btn">Level 4</button>
-            <button id="btn4" class="btn">Level 5</button>
-            <button id="btn5" class="btn">Overall</button>
-            
-            
-            <table id="leaderboardTable" class="table"><!-- LOOK AT TABLE CLASS IN BOOTSTRAP-->
-                <tr class='leaderboardHeadings'>
-                    <th scope="col">Position</th>
-                    <th scope="col">Score</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Time</th>
-                </tr>
-            
-            
-                <?php  //needs to be php as the leadboard is stored server-side.
-                    $leaderboardData = json_decode(file_get_contents('./data/leaderboard.json'), true);
-                    
-                    if(!empty($leaderboardData[5])){
-                        foreach($leaderboardData[5] as $position => $entry){
-                            $actualPosition = $position + 1;
-                            echo    "<tr>
-                                    <td>{$actualPosition}</td>
-                                    <td>{$entry['points']}</td>
-                                    <td>{$entry['username']}</td>
-                                    <td>{$entry['time']}</td>
-                                </tr>";
+            <div id="contentDiv">
+                <h1>Leaderboard</h1>
+                
+                <!-- MAKE THE ACTUAL LEADERBOARD HERE-->
+                
+                <button id="btn0" class="btn">Level 1</button>
+                <button id="btn1" class="btn">Level 2</button>
+                <button id="btn2" class="btn">Level 3</button>
+                <button id="btn3" class="btn">Level 4</button>
+                <button id="btn4" class="btn">Level 5</button>
+                <button id="btn5" class="btn">Overall</button>
+                
+                
+                <table id="leaderboardTable" class="table"><!-- LOOK AT TABLE CLASS IN BOOTSTRAP-->
+                    <tr class='leaderboardHeadings'>
+                        <th scope="col">Position</th>
+                        <th scope="col">Score</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Time</th>
+                    </tr>
+                
+                
+                    <?php  //needs to be php as the leadboard is stored server-side.
+                        $leaderboardData = json_decode(file_get_contents('./data/leaderboard.json'), true);
+                        
+                        if(!empty($leaderboardData[5])){
+                            foreach($leaderboardData[5] as $position => $entry){
+                                $actualPosition = $position + 1;
+                                echo    "<tr>
+                                        <td>{$actualPosition}</td>
+                                        <td>{$entry['points']}</td>
+                                        <td>{$entry['username']}</td>
+                                        <td>{$entry['time']}</td>
+                                    </tr>";
+                            }
                         }
-                    }
-                    
-                ?>
-            </table>
+                        
+                    ?>
+                </table>
+            </div>
         </div>
         <script>
             function clearTable(table){

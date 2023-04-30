@@ -1,29 +1,9 @@
 [
     [
         {
-            "points": 31,
-            "username": "sdf",
-            "time": "5.13"
-        },
-        {
-            "points": 30,
-            "username": "df",
-            "time": "10.27"
-        },
-        {
-            "points": 20,
-            "username": "wonga",
-            "time": 0.59
-        },
-        {
-            "points": 15,
-            "username": "sdf",
-            "time": 1
-        },
-        {
-            "points": 15,
-            "username": "sdf",
-            "time": 1
+            "points": 0,
+            "username": "werty",
+            "time": "0.98"
         }
     ],
     [
@@ -46,6 +26,11 @@
             "points": 15,
             "username": "sdf",
             "time": 2
+        },
+        {
+            "points": null,
+            "username": "werty",
+            "time": null
         }
     ],
     [
@@ -68,6 +53,11 @@
             "points": 9,
             "username": "sdf",
             "time": 3
+        },
+        {
+            "points": null,
+            "username": "werty",
+            "time": null
         }
     ],
     [
@@ -90,6 +80,11 @@
             "points": 2,
             "username": "sdf",
             "time": 45
+        },
+        {
+            "points": null,
+            "username": "werty",
+            "time": null
         }
     ],
     [
@@ -112,6 +107,11 @@
             "points": 3,
             "username": "sdf",
             "time": 5
+        },
+        {
+            "points": null,
+            "username": "werty",
+            "time": null
         }
     ],
     [
@@ -134,6 +134,11 @@
             "points": 44,
             "username": "sdf",
             "time": 56
+        },
+        {
+            "points": 0,
+            "username": "werty",
+            "time": 0.98
         }
     ]
 ]
