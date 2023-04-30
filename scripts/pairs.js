@@ -90,12 +90,12 @@ const Game = {//Variables needed for the pairs game. They are declared in an obj
     previousBestScore : 0,
     points:0,
     startTime:0,
-    levelFinished : true,
+    levelFinished : false,
     timerInterval : null,
     currentSecond : 0,
     totalTimes:[],
     startNumberOfCards : 6,
-    currentLevel : 4, //Levels start from zero (so the number of cards in the first level is equal to the number of cards declared in 'startNumberOfCards'),
+    currentLevel : 0, //Levels start from zero (so the number of cards in the first level is equal to the number of cards declared in 'startNumberOfCards'),
     gameFinished : false,
     levelScores : []
 
