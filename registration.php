@@ -30,13 +30,10 @@ if (!empty($_POST['username']) && !empty($_POST['avatarColour']) && !empty($_POS
         $validAvatarMouthSelected = true;
     }
     if ($validUsername && $validAvatarEyesSelected && $validAvatarColourSelected && $validAvatarMouthSelected) {
-        //Set session variables - 'loggedIn' and 'username' - if session storage can be modified client-side then a hash of the username and salt is needed??
-
         $_SESSION['loggedIn'] = true;
         $_SESSION['username'] = $username;
         $_SESSION['avatar'] = json_encode(array("colour" => $_POST["avatarColour"], "eyes" => $_POST["avatarEyes"], "mouth" => $_POST["avatarMouth"]));
-        //setcookie("avatar", sprintf('{"colour":"%s","eyes":"%s","mouth":"%s"}',$_POST["avatarColour"],$_POST["avatarEyes"],$_POST["avatarMouth"] ));//$_POST["avatarColour"], $_POST["avatarEyes"], $_POST["avatarMouth"])));
-        //echo print_r($_SESSION);
+        setcookie("avatar", sprintf('{"colour":"%s","eyes":"%s","mouth":"%s"}',$_POST["avatarColour"],$_POST["avatarEyes"],$_POST["avatarMouth"] ));
         header('Location: index.php');
     }
 }
@@ -102,7 +99,6 @@ if (!empty($_POST['username']) && !empty($_POST['avatarColour']) && !empty($_POS
 </head>
 
 <body>
-    <!-- user profile information should be stored in cookies-->
     <?php include("navbar.php") ?>
     <div id="main">
         <img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">
@@ -111,8 +107,7 @@ if (!empty($_POST['username']) && !empty($_POST['avatarColour']) && !empty($_POS
                 <h1>Register here</h1>
             </div>
             <div class="row">
-                <div class="col--7 col-md"><!--at small breakpoint the preview is stacked.-->
-
+                <div class="col--7 col-md">
                     <form id="registrationForm" onsubmit="return ValidateUsername()" method="post"
                         action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="needs-validation">
                         <!--the action submits the form data to the same page, htmlspecialchars() prevents XSS attacks, $_SERVER["PHP_SELF"] gets the name of the currently executing script.-->
@@ -272,10 +267,8 @@ if (!empty($_POST['username']) && !empty($_POST['avatarColour']) && !empty($_POS
 
                 </div>
 
-                <div class="col" id="avatarPreview" style="padding:1;">
-                    <!--padding is 1 as when it is 0 nothing is shown as the column has no predefined height.-->
-                    <img class="avatarImages" id="avatarColourImg" src="./images/emoji assets/skin/green.png"
-                        style="position:relative;display:block;">
+                <div class="col" id="avatarPreview">
+                    <img class="avatarImages" id="avatarColourImg" src="./images/emoji assets/skin/green.png">
                     <img class="avatarImages" id="avatarMouthImg" src="./images/emoji assets/mouth/open.png">
                     <img class="avatarImages" id="avatarEyesImg" src="./images/emoji assets/eyes/closed.png">
                 </div>

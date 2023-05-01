@@ -2,13 +2,11 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById("playPairsbtn").addEventListener("click", PlayGame);
 });
 function setupGameArea(numberOfCards, canMatch3Or4Cards){
-    //Using a few arrays of potential attributes for the colour, eyes, and mouth
-    let colours = ["green", "red", "yellow"]; //initialise these arrays with array literal notation.
+    let colours = ["green", "red", "yellow"]; 
     let eyes = ["closed", "laughing", "long", "normal", "rolling", "winking"];
     let mouths = ["open", "sad", "smiling", "straight", "surprise", "teeth"];
 
     var table = document.getElementById('cardTable');
-    //generate a list of pairs of images, then select an image at random and add it to to the table row.
     //Generates a list of 'card' objects with the attributes being the images of the skin, eyes, and mouth.
     let cards = [];
     while(cards.length < numberOfCards){
@@ -22,7 +20,7 @@ function setupGameArea(numberOfCards, canMatch3Or4Cards){
             mouth:`./images/emoji assets/mouth/${mouths[rndMouthIndex]}.png`
         };
         
-            var contains = cards.some(elem => {
+        var contains = cards.some(elem => { //a boolean flag if the cards array already contains the card just produced.
             return (card.colour === elem.colour && card.eyes === elem.eyes && card.mouth === elem.mouth);
         });
         
@@ -32,7 +30,7 @@ function setupGameArea(numberOfCards, canMatch3Or4Cards){
             if(differenceInNumOfCards <= 4 && canMatch3Or4Cards){
                 numCardsToMatch = differenceInNumOfCards;
             }
-            else if(canMatch3Or4Cards){ // as if it is 5, a 4 card match shouldn't be added as it would leave a singular card as a match.
+            else if(canMatch3Or4Cards){ // if there are 5 cards remaining, a 4 card match shouldn't be added as it would leave a singular card as a set of cards to match.
                 if(differenceInNumOfCards > 5){
                     numCardsToMatch = Math.floor( Math.random() * (4 - 2 + 1)) + 2; //Gets a random number from: 2,3
                 } else{ //if there are 5 cards remaining, then choose 2 or 3 cards to match.
@@ -46,11 +44,9 @@ function setupGameArea(numberOfCards, canMatch3Or4Cards){
             }
         }
     }
-    // console.log(cards);
-    cards.forEach(card => console.log(card.numCardsToMatch));
     //Adds the list of cards to the table in a random way.
     let numberOfRows = Math.ceil(numberOfCards / 5) ;
-    // THIS MAKES THE TABLE CELLS ADD TO THE TABLE IN ROWS OF 5.
+    // adds the cards to the table in rows of 5.
     for(let i=0;i<numberOfRows;i++){
         let row = document.createElement("tr");
         let j =0;
@@ -79,36 +75,33 @@ function setupGameArea(numberOfCards, canMatch3Or4Cards){
         }
         table.append(row);
     }
-    console.log(table);
     
 }
-const Game = {//Variables needed for the pairs game. They are declared in an object so they are not global variables.
+const Game = {//Variables needed for the pairs game.
     clicks:0,
     matchedCells:[],
-    cardsTurnedOver : [], //This will have a maximum of 3 cells in it at a time (for matching pairs - clickedCells.length == number of cards to match + 1).
+    cardsTurnedOver : [], 
     potentialMatch : true,
     previousBestScore : 0,
     points:0,
     startTime:0,
-    levelFinished : true,
+    levelFinished : false,
     timerInterval : null,
     currentSecond : 0,
     totalTimes:[],
     startNumberOfCards : 6,
-    currentLevel : 4, //Levels start from zero (so the number of cards in the first level is equal to the number of cards declared in 'startNumberOfCards'),
+    currentLevel : 0, //Levels start from zero (so the number of cards in the first level is equal to the number of cards declared in 'startNumberOfCards'),
     gameFinished : false,
     levelScores : []
 
 }
 
-function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pushed) to the Game.cardsClicked array properly and that the display properties are the correct value.
+function cardClicked(event){
     clickedCard = event.currentTarget.id;
-    //make Game.cardsTurnedOver to be the id of the cards clicked.
-    console.log(!Game.cardsTurnedOver.includes(clickedCard));
 
     if(!Game.cardsTurnedOver.includes(clickedCard)){
         if(!Game.potentialMatch){
-            Game.cardsTurnedOver.forEach(cardId => {//iterating over the cells that are currently turned over and flipping them back over.
+            Game.cardsTurnedOver.forEach(cardId => {//iterating over the cards that are currently turned over and flipping them back over.
                 document.getElementById(cardId).children[0].classList.remove("rotate");
             });
             Game.cardsTurnedOver = [];
@@ -120,21 +113,19 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
             let isPotentialMatch = true;
             for(let i=1;i<Game.cardsTurnedOver.length;i++){
                 for(let j=0;j<3;j++){
-                    //console.log(Game.cardsTurnedOver[i].children[0]);
                     let card = document.getElementById(Game.cardsTurnedOver[i]);
                     if(card.children[0].children[1].children[j].src !== document.getElementById(Game.cardsTurnedOver[0]).children[0].children[1].children[j].src){
                         isPotentialMatch = false;
                         break;
                     }
                 }
-                if(!isPotentialMatch){ //NOT SURE IF NEEDED
+                if(!isPotentialMatch){
                     break;
                 }
                 
             }
             if(isPotentialMatch){
-                if(parseInt(Game.cardsTurnedOver[0].slice(-1)) === Game.cardsTurnedOver.length) { //A complete match has occurred / last digit of the id is the number of occurrences.
-                    //Can take any cell element in cardsTurnedOver as they are all the same card and will have the same length.
+                if(parseInt(Game.cardsTurnedOver[0].slice(-1)) === Game.cardsTurnedOver.length) { //A complete match has occurred (the last digit of the id is the number of occurrences of that card)
                     Game.cardsTurnedOver.forEach(cardId => {
                         document.getElementById(cardId).removeEventListener('click', cardClicked)
                     });
@@ -151,8 +142,8 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
                 Game.potentialMatch = true;
             } else{
                 Game.potentialMatch = false;
-                if(Game.points > 3){ // 3 point penalty for an incorrect attempt.
-                    Game.points -= 3;
+                if(Game.points > 2){ // 2 point penalty for an incorrect attempt.
+                    Game.points -= 2;
                 }
                 else{
                     Game.points = 0;
@@ -162,8 +153,7 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
             if(Game.levelFinished){
                 let gameAreaDiv = document.getElementById("gameAreaDiv");
                 let centeredContent = document.getElementById("centeredContent");
-                // let banner = document.createElement('div');
-                // banner.id = "winBanner";
+
                 let bannerHeading = document.createElement('h1');
                 bannerHeading.innerHTML = `You won with ${Game.points} points!`;
 
@@ -175,14 +165,12 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
 
                 Game.totalTimes.push(totalTime);
                 bannerTiming.innerHTML = `Completed in: ${totalTime} seconds`
-                // banner.append(bannerHeading);
-                // banner.append(bannerTiming);
+                
                 centeredContent.prepend(bannerTiming);
                 centeredContent.prepend(bannerHeading);
                 
                 gameAreaDiv.classList.add("winBannerAnimation");
                 gameAreaDiv.style.setProperty("background-color", "#89CFF0");
-                // document.getElementById('gameAreaDiv').appendChild(banner);
 
                 let table = document.getElementById("cardTable");
                 table.classList.add("hide");
@@ -191,14 +179,12 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
                 playPairsBtn.classList.add("winBannerAnimation");
                 
                 clearInterval(Game.timerInterval);
-                //setGameAreaBackgroundColour(true); //So there isn't a flash of gold.
                
                 Game.levelScores.push(Game.points);
                 if(Game.currentLevel === 4){ //the 5th level has been completed
-                    playPairsBtn.innerHTML = "Play again"; //"Play again";
+                    playPairsBtn.innerHTML = "Play again";
 
-                    //======================================================================= CHECK IF THE USER IS LOGGEDIN - if yes display button, otherwise don't ==========================================
-                    fetch('./submitScoreLoggedIn.php', {
+                    fetch('./submitScoreLoggedIn.php', { //returns html string for the 'submit score' button if the user is using a registered session, otherwise it returns nothing.
                         method:'GET',
                         headers:{
                             'Accept' : 'application/json',
@@ -231,8 +217,6 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
     
 }
 function postScoreToLeaderboard(){
-    console.log("HELLO");
-    //Make a post request here with the relevant details.
     fetch('./leaderboard.php', {
         method:'POST',
         headers:{
@@ -244,38 +228,29 @@ function postScoreToLeaderboard(){
             'totalTimes':Game.totalTimes
         })
     });
-    //Then remove the event listener from the submit score button (the the same score isn't submitted more than once).
     let submitScoreBtn = document.getElementById('submitScoreButton');
-    
-    if(submitScoreBtn !== null){ //If the submit score button exists, remove the onclick event so the score is only to the scoreboard once.
+    if(submitScoreBtn !== null){ //If the submit score button exists, remove the onclick event so the score is only posted to the scoreboard once.
         submitScoreBtn.removeEventListener('click', postScoreToLeaderboard);
     }
-    
-    
 }
 
 function resetGame(event){
     //Remove the previous cells of the table (empty the table), then call PlayGame() to setup the board again.
-
     let bannerHeadings = document.getElementsByClassName("endOfLevelHeadings");
     while(bannerHeadings.length > 0){
         bannerHeadings[0].remove();
     }
-    
-    // let banner = document.getElementById('winBanner');
-    // banner.remove();
     let table = document.getElementById('cardTable');
     table.classList.remove('hide');
     table.classList.add('showTable');
 
-    table.replaceChildren(); //removes all children from the table element.
-    //Reset all of the Game object properties here:
-    
+    table.replaceChildren();
     //if the submit score button exists, remove it from the DOM.
     let submitScoreBtn = document.getElementById('submitScoreButton');
     if(submitScoreBtn !== null){
         submitScoreBtn.remove();
     }
+    //Reset all of the Game object properties
     if(Game.gameFinished === true){
         Game.currentLevel = 0;
         Game.gameFinished = false;
@@ -291,23 +266,15 @@ function resetGame(event){
     
     PlayGame(event);
 }
-function setupGameForLevel(){
-    //Here will be the checks for if the entire game is finished and not just the level (e.g. if(Game.currentLevel === 4){ do something at the end of the})
-    setupGameArea(Game.startNumberOfCards + Game.currentLevel * 2, true);
-}
 function PlayGame(event){
-    //Add the points and timer heading.
-    //Get and set the previous best score for the current level to the Game object.
     if(document.getElementById('cardTable') === null){//if table doesn't exist in the DOM then create it - on the first occurence.
         let table = document.createElement('table');
         table.id = 'cardTable';
         document.getElementById('gameAreaDiv').append(table);
-
     }
     fetch('./data/leaderboard.json')
         .then((response) => response.json())
         .then((leaderboardData) => {
-            
             let gameAreaDiv = document.getElementById('gameAreaDiv');
             if(leaderboardData[Game.currentLevel].length > 0){
                 Game.previousBestScore = leaderboardData[Game.currentLevel][0]['points'];
@@ -316,8 +283,7 @@ function PlayGame(event){
                 Game.previousBestScore = -1;
                 gameAreaDiv.style.setProperty('background-color', '#FFD700');
             }
-        }) //look into validating the JSON file - check if it's empty etc.
-        .catch((error) => console.log(error));
+        });
 
     if(document.getElementById('pointsHeading') === null && document.getElementById('timerHeading') === null){
         let pointsHeading = document.createElement('h1');
@@ -325,8 +291,6 @@ function PlayGame(event){
         let headingDiv = document.createElement('div');
         headingDiv.classList = "headings ";
         pointsHeading.id = "pointsHeading";
-
-        
         timerHeading.id = "timerHeading";
         
         let mainDiv = document.getElementById('main');
@@ -345,10 +309,6 @@ function PlayGame(event){
     
     let totalNumberOfCards = Game.startNumberOfCards + 2 * Game.currentLevel;
     setupGameArea(totalNumberOfCards, Game.currentLevel >= 2);
-    
-    
-    
-    console.log(document.getElementById('cardTable').children);
     
     let rows = document.getElementById('cardTable').children;
     for(let i =0;i<rows.length;i++){

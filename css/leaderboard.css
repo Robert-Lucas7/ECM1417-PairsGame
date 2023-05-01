@@ -5,6 +5,9 @@
     width:100%;
     text-align: center;
 }
+#leaderboardTable td{
+    overflow-wrap: break-word;
+}
 #contentDiv{
     background-color: grey;
     width: 75%;
@@ -13,7 +16,7 @@
     inset: 0;
     margin: auto;
     box-shadow: 5px 5px #000000;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 #contentDiv h1{
     text-align: center;

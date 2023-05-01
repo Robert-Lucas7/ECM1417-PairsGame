@@ -19,13 +19,9 @@
         
         <img src="./images/arcade.jpg" alt="Arcade" id="arcadeImage">
         
-        <div id="gameAreaDiv" class="">
-            
-            <!--<table id="cardTable">-->
-
-            
+        <div id="gameAreaDiv">
             <div id="centeredContent">
-                <button id="playPairsbtn" class="btn">Play Pairs</button>
+                <button id="playPairsbtn" class="btn">Start the game</button>
             </div>
             
         </div>

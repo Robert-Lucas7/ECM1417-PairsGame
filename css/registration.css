@@ -1,5 +1,7 @@
 #avatarColourImg {
   z-index: -1;
+  display: block;
+  position: relative;
 }
 .col{
   height:100%;
@@ -22,6 +24,7 @@
 
 #avatarPreview {
   position: relative;
+  height: 100%;
 }
 
 h1 {
@@ -45,13 +48,11 @@ label {
   height: 0;
 }
 
-/* IMAGE STYLES */
 [type=radio]+img {
   cursor: pointer;
   width: 100%;
 }
 
-/* CHECKED STYLES */
 [type=radio]:checked+img {
   outline: 2px solid #f00;
 }
