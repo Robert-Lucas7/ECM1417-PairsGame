@@ -196,12 +196,23 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
                 Game.levelScores.push(Game.points);
                 if(Game.currentLevel === 4){ //the 5th level has been completed
                     playPairsBtn.innerHTML = "Play again"; //"Play again";
-                    let submitScoreBtn = document.createElement('button');
-                    submitScoreBtn.innerHTML = 'Submit Score';
-                    submitScoreBtn.id = 'submitScoreButton';
-                    submitScoreBtn.classList = 'buttons btn btn-success';
-                    submitScoreBtn.addEventListener("click", postScoreToLeaderboard);
-                    playPairsBtn.after(submitScoreBtn);//winBanner
+
+                    //======================================================================= CHECK IF THE USER IS LOGGEDIN - if yes display button, otherwise don't ==========================================
+                    fetch('./submitScoreLoggedIn.php', {
+                        method:'GET',
+                        headers:{
+                            'Accept' : 'application/json',
+                            'Content-Type' : 'application/json'
+                        }
+                    }).then(response => response.text())
+                    .then(data => {
+                        if(data !== ""){
+                            let wrapper = document.createElement("div");
+                            wrapper.innerHTML = data;
+                            let submitScoreBtn = wrapper.firstChild;
+                            playPairsBtn.after(submitScoreBtn);
+                        }
+                    });
                     Game.gameFinished = true;
                     
                 } else{
