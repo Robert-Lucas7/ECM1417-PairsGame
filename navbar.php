@@ -54,7 +54,7 @@
             <a href='pairs.php' class='nav-link'>Play Pairs</a>
         </li>
         <?php
-            if($_SESSION['loggedIn'] === true){
+            if(!empty($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true){
                 echo   "<li name='leaderboard' class='nav-item'>
                             <a href='leaderboard.php' class='nav-link'>Leaderboard</a>
                         </li>";
@@ -69,7 +69,7 @@
     </ul>
     <?php
         //NEED TO GET THE AVATAR DETAILS FROM PHP SESSION STORAGE
-        if($_SESSION['loggedIn'] === true){//As the user is 'loggedIn' there will be json data stored in the php SESSION describing the avatar.
+        if(!empty($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true){//As the user is 'loggedIn' there will be json data stored in the php SESSION describing the avatar.
             $avatarArr = json_decode($_SESSION['avatar'], true);
             //print_r($avatarArr);
             

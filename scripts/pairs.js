@@ -90,12 +90,12 @@ const Game = {//Variables needed for the pairs game. They are declared in an obj
     previousBestScore : 0,
     points:0,
     startTime:0,
-    levelFinished : false,
+    levelFinished : true,
     timerInterval : null,
     currentSecond : 0,
     totalTimes:[],
     startNumberOfCards : 6,
-    currentLevel : 0, //Levels start from zero (so the number of cards in the first level is equal to the number of cards declared in 'startNumberOfCards'),
+    currentLevel : 4, //Levels start from zero (so the number of cards in the first level is equal to the number of cards declared in 'startNumberOfCards'),
     gameFinished : false,
     levelScores : []
 
@@ -151,8 +151,8 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
                 Game.potentialMatch = true;
             } else{
                 Game.potentialMatch = false;
-                if(Game.points > 5){
-                    Game.points -= 1;
+                if(Game.points > 3){ // 3 point penalty for an incorrect attempt.
+                    Game.points -= 3;
                 }
                 else{
                     Game.points = 0;
@@ -210,6 +210,7 @@ function cardClicked(event){ //==================== CHECK IF CARDS ARE ADDED (pu
                             let wrapper = document.createElement("div");
                             wrapper.innerHTML = data;
                             let submitScoreBtn = wrapper.firstChild;
+                            submitScoreBtn.addEventListener('click', postScoreToLeaderboard);
                             playPairsBtn.after(submitScoreBtn);
                         }
                     });
@@ -242,10 +243,11 @@ function postScoreToLeaderboard(){
             'levelScores':Game.levelScores,
             'totalTimes':Game.totalTimes
         })
-    }).then(response => console.log(response.json()));
+    });
     //Then remove the event listener from the submit score button (the the same score isn't submitted more than once).
     let submitScoreBtn = document.getElementById('submitScoreButton');
-    if(submitScoreBtn !== null){
+    
+    if(submitScoreBtn !== null){ //If the submit score button exists, remove the onclick event so the score is only to the scoreboard once.
         submitScoreBtn.removeEventListener('click', postScoreToLeaderboard);
     }
     
@@ -357,7 +359,7 @@ function PlayGame(event){
     }
 
     Game.startTime = Date.now();
-    Game.timerInterval = setInterval(updateTimer,10);
+    Game.timerInterval = setInterval(updateTimer,100);
     
 }
 function updateTimer(){
@@ -367,7 +369,7 @@ function updateTimer(){
     let s = Math.floor(timeDiffMs/1000) % 60;
     if(s != Game.currentSecond){
         Game.currentSecond = s;
-        if(Game.points - 1 >= 0 && s % 2 === 0){
+        if(Game.points - 1 >= 0 && s % 2 === 0){ //remove a point every 2 seconds if the points score will still be positive.
             Game.points -= 1;
             updatePoints();
         }
@@ -375,7 +377,7 @@ function updateTimer(){
     }
 
     let m = Math.floor(timeDiffMs/60000) % 60;
-    timer.innerHTML = `Time: ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}:${ms}`;
+    timer.innerHTML = `Time: ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${Math.floor(ms/100)}`;
 }
 function updatePoints(){
     let pointsHeading = document.getElementById('pointsHeading');
