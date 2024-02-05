@@ -1,4 +1,4 @@
-[Azure VM Link](ml-lab-4d78f073-aa49-4f0e-bce2-31e5254052c7.ukwest.cloudapp.azure.com:54267)
+## What each page does
 
 ### Pairs.php
 * the game will start with 6 cards displayed face down and 2 cards will be added for each level completed (there are 5 levels).
